@@ -50,7 +50,8 @@ app.use(
   })
 );
 
-export default app;
+// export default app;
+export const handler = app.fetch;
 
 // Export the instrumented app if you've wired up a Fiberplane-Hono-OpenTelemetry trace collector
 //
