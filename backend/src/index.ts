@@ -1,4 +1,3 @@
-import { instrument } from "@fiberplane/hono-otel";
 import { createFiberplane, createOpenAPISpec } from "@fiberplane/hono";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
@@ -7,9 +6,18 @@ import { users } from "./db/schema";
 
 type Bindings = {
   DATABASE_URL: string;
+  ORIGIN: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+// Middleware to add CORS headers
+app.use("*", (c, next) => {
+  c.header("Access-Control-Allow-Origin", c.env.ORIGIN);
+  c.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  c.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  return next();
+});
 
 app.get("/", (c) => {
   return c.text("Honc! 🪿");
@@ -28,25 +36,19 @@ app.get("/api/users", async (c) => {
  * Serve a simplified api specification for your API
  * As of writing, this is just the list of routes and their methods.
  */
-app.get("/openapi.json", c => {
-  // @ts-expect-error - @fiberplane/hono is in beta and still not typed correctly
-  return c.json(createOpenAPISpec(app, {
-    openapi: "3.0.0",
-    info: {
-      title: "Honc D1 App",
-      version: "1.0.0",
-    },
-  }))
-});
+/* '@ts-expect-error - @fiberplane/hono is in beta and still not typed correctly*/
 
 /**
  * Mount the Fiberplane api explorer to be able to make requests against your API.
- * 
+ *
  * Visit the explorer at `/fp`
  */
-app.use("/fp/*", createFiberplane({
-  openapi: { url: "/openapi.json" }
-}));
+app.use(
+  "/fp/*",
+  createFiberplane({
+    openapi: { url: "/openapi.json" },
+  })
+);
 
 export default app;
 
