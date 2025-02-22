@@ -1,21 +1,19 @@
 import { createFiberplane, createOpenAPISpec } from "@fiberplane/hono";
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
 import { Hono } from "hono";
-import { users } from "./db/schema";
-
-type Bindings = {
-  DATABASE_URL: string;
-  ORIGIN: string;
-};
+import { Bindings } from "./bindings";
+import patternRouter from "./routes/pattern.routes";
+import userRouter from "./routes/user.routes";
+import authRouter from "./routes/auth.routes";
+// import imageRouter from "./routes/image.routes";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Middleware to add CORS headers
 app.use("*", (c, next) => {
-  c.header("Access-Control-Allow-Origin", c.env.ORIGIN);
-  c.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  c.header("Access-Control-Allow-Origin", "*");
+  c.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   c.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
   return next();
 });
 
@@ -23,14 +21,10 @@ app.get("/", (c) => {
   return c.text("Honc! 🪿");
 });
 
-app.get("/api/users", async (c) => {
-  const sql = neon(c.env.DATABASE_URL);
-  const db = drizzle(sql);
-
-  return c.json({
-    users: await db.select().from(users),
-  });
-});
+app.route("/auth", authRouter);
+app.route("/api", patternRouter);
+app.route("/api", userRouter);
+// app.route("/api", imageRouter);
 
 /**
  * Serve a simplified api specification for your API
@@ -43,6 +37,7 @@ app.get("/api/users", async (c) => {
  *
  * Visit the explorer at `/fp`
  */
+
 app.use(
   "/fp/*",
   createFiberplane({
@@ -50,8 +45,7 @@ app.use(
   })
 );
 
-// export default app;
-export const handler = app.fetch;
+export default app;
 
 // Export the instrumented app if you've wired up a Fiberplane-Hono-OpenTelemetry trace collector
 //
