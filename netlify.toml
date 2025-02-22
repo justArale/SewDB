@@ -1,6 +1,0 @@
-[build]
-  command = "npm install && npm run build"
-  publish = "frontend/dist"
-
-[[functions]]
-  directory = "backend/src"
