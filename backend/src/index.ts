@@ -31,7 +31,16 @@ app.route("/api", userRouter);
  * As of writing, this is just the list of routes and their methods.
  */
 /* '@ts-expect-error - @fiberplane/hono is in beta and still not typed correctly*/
-
+app.get("/openapi.json", (c) => {
+  return c.json(
+    createOpenAPISpec(app as any, {
+      info: {
+        title: "Honc D1 App",
+        version: "1.0.0",
+      },
+    })
+  );
+});
 /**
  * Mount the Fiberplane api explorer to be able to make requests against your API.
  *
