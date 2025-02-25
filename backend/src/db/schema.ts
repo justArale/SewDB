@@ -1,5 +1,12 @@
 import { json } from "drizzle-orm/mysql-core";
-import { jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  jsonb,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  boolean,
+} from "drizzle-orm/pg-core";
 
 export type NewUser = typeof users.$inferInsert;
 export type NewPattern = typeof patterns.$inferInsert;
@@ -10,7 +17,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   likes: jsonb("likes"),
-  image: text("image"),
+  isAdmin: boolean("is_admin").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
