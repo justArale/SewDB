@@ -5,6 +5,8 @@ import patternRouter from "./routes/pattern.routes";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
 // import imageRouter from "./routes/image.routes";
+import { bearerAuth } from "hono/bearer-auth";
+import { getCookie } from "hono/cookie";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -16,6 +18,15 @@ app.use("*", (c, next) => {
 
   return next();
 });
+
+app.use(
+  "/api/*",
+  bearerAuth({
+    verifyToken: async (token, c) => {
+      return token === getCookie(c, "authToken");
+    },
+  })
+);
 
 app.get("/", (c) => {
   return c.text("Honc! 🪿");
