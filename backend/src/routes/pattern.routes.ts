@@ -35,14 +35,14 @@ patternRouter.get("/patterns/:id", async (c) => {
 });
 
 patternRouter.post("/patterns", async (c) => {
-  const { name, image, category, sizes } = await c.req.json();
+  const { name, image, category, sizes, source } = await c.req.json();
 
   const sql = neon(c.env.DATABASE_URL);
   const db = drizzle(sql);
 
   const newPattern = await db
     .insert(patterns)
-    .values({ name, image, category, sizes })
+    .values({ name, image, category, sizes, source })
     .returning();
 
   return c.json(newPattern[0]);
@@ -52,7 +52,7 @@ patternRouter.put("/patterns/:id", async (c) => {
   const sql = neon(c.env.DATABASE_URL);
   const db = drizzle(sql);
   const id = Number(c.req.param("id"));
-  const { name, image, category, sizes } = await c.req.json();
+  const { name, image, category, sizes, source } = await c.req.json();
 
   //Pattern exists?
   const patternExists = await db
@@ -72,6 +72,7 @@ patternRouter.put("/patterns/:id", async (c) => {
       image,
       category,
       sizes,
+      source,
       updatedAt: new Date(),
     })
     .where(eq(patterns.id, id));
