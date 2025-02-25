@@ -18,6 +18,7 @@ const signupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   name: z.string(),
+  isAdmin: z.boolean().optional(),
 });
 
 const loginSchema = z.object({
@@ -26,7 +27,9 @@ const loginSchema = z.object({
 });
 
 authRouter.post("/signup", async (c) => {
-  const { email, password, name } = signupSchema.parse(await c.req.json());
+  const { email, password, name, isAdmin } = signupSchema.parse(
+    await c.req.json()
+  );
 
   if (!email || !password || !name) {
     return c.json({ message: "Provide email, password and name" }, 400);
@@ -70,6 +73,7 @@ authRouter.post("/signup", async (c) => {
         email,
         password: hashedPassword,
         name,
+        isAdmin: isAdmin || false,
       })
       .returning();
 
