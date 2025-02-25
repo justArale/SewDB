@@ -3,4 +3,5 @@ export type Bindings = {
   ORIGIN: string;
   CLOUDINARY_URL: string;
   params: { id: string; categrory: string; sizes: string };
+  TOKEN_SECRET: string;
 };
