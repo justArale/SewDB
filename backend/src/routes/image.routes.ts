@@ -1,11 +1,16 @@
 import { Hono } from "hono";
-import { encodeBase64 } from "hono/utils/encode";
 import { Bindings } from "../bindings";
 import { getCookie } from "hono/cookie";
+import { eq } from "drizzle-orm";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import { patterns } from "../db/schema";
+import crypto from "crypto";
 
 const imageRouter = new Hono<{ Bindings: Bindings }>();
 
 const ALLOWED_FORMATS = ["jpg", "png", "webm", "jpeg", "gif", "heic", "webp"];
+
 // Universal Upload-Handler
 imageRouter.post("/upload/image/:folder", async (c) => {
   try {
@@ -28,23 +33,24 @@ imageRouter.post("/upload/image/:folder", async (c) => {
       return c.json({ message: "Invalid folder" }, 400);
     }
 
-    // Convert to Base64 & upload to Cloudinary via fetch
-    const byteArrayBuffer = await image.arrayBuffer();
-    const base64 = encodeBase64(byteArrayBuffer);
+    // Signature for cloudinary
+    const timestamp = Math.floor(Date.now() / 1000);
+    const folderPath = `SewDB/${folder}`;
+    const stringToSign = `folder=${folderPath}&timestamp=${timestamp}${c.env.CLOUDINARY_SECRET}`;
+    const signature = crypto
+      .createHash("sha1")
+      .update(stringToSign)
+      .digest("hex");
 
-    // Prepare FormData for the upload
+    // Prepare formData for the upload
     const formData = new FormData();
-    formData.append("file", `data:image/${extension};base64,${base64}`);
-    formData.append(
-      "upload_preset",
-      c.env.CLOUDINARY_PRESET || "default_preset" // Ensure this variable is correct
-    );
-    formData.append(
-      "folder",
-      folder === "avatar" ? "SewDB/avatar" : "SewDB/pattern" // ⬅️ Choose folder
-    );
+    formData.append("file", image); // Direkt die Datei senden (kein Base64 notwendig)
+    formData.append("timestamp", String(timestamp));
+    formData.append("api_key", String(c.env.CLOUDINARY_KEY));
+    formData.append("signature", signature);
+    formData.append("folder", folderPath);
 
-    // Use fetch for Cloudinary upload
+    // Use Cloudinary-Upload-URL
     const cloudinaryUploadUrl = `https://api.cloudinary.com/v1_1/${c.env.CLOUDINARY_NAME}/image/upload`;
     const response = await fetch(cloudinaryUploadUrl, {
       method: "POST",
@@ -53,8 +59,8 @@ imageRouter.post("/upload/image/:folder", async (c) => {
 
     const uploadResponse = (await response.json()) as any;
 
-    console.error("Cloudinary Upload Error:", uploadResponse);
     if (!response.ok) {
+      console.error("Cloudinary Upload Error:", uploadResponse);
       throw new Error(
         uploadResponse.error?.message || "Unknown Cloudinary error"
       );
@@ -63,8 +69,61 @@ imageRouter.post("/upload/image/:folder", async (c) => {
     return c.json({ url: uploadResponse.secure_url });
   } catch (err) {
     console.error("Upload error:", err);
-    const errorMessage = err instanceof Error ? err.message : "Unknown error";
-    return c.json({ message: "Upload failed", error: errorMessage }, 500);
+    return c.json(
+      {
+        message: "Upload failed",
+        error: err instanceof Error ? err.message : "Unknown error",
+      },
+      500
+    );
+  }
+});
+
+// Universal Delete-Handler
+imageRouter.delete("/delete/image/:folder/:id", async (c) => {
+  try {
+    const folder = c.req.param("folder");
+    const publicId = `SewDB/${folder}/${c.req.param("id")}`;
+
+    // Signature for cloudinary
+    const timestamp = Math.floor(Date.now() / 1000);
+    const stringToSign = `public_id=${publicId}&timestamp=${timestamp}${c.env.CLOUDINARY_SECRET}`;
+    const signature = crypto
+      .createHash("sha1")
+      .update(stringToSign)
+      .digest("hex");
+
+    // Cloudinary DELETE via POST-Request
+    const formData = new FormData();
+    formData.append("public_id", publicId);
+    formData.append("timestamp", String(timestamp));
+    formData.append("api_key", String(c.env.CLOUDINARY_KEY));
+    formData.append("signature", signature);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${c.env.CLOUDINARY_NAME}/image/destroy`,
+      {
+        method: "POST", // Cloudinary requires POST for deletion
+        body: formData,
+      }
+    );
+
+    const deleteResponse = (await response.json()) as any;
+    if (!response.ok) {
+      throw new Error(
+        deleteResponse.error?.message || "Unknown Cloudinary error"
+      );
+    }
+    if (deleteResponse.result === "not found") {
+      return c.json({ message: "Image not found or already deleted" }, 404);
+    }
+
+    console.log("delete response", deleteResponse.result);
+
+    return c.json({ message: "Image deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting image:", err);
+    return c.json({ message: "Delete failed", error: err }, 500);
   }
 });
 
