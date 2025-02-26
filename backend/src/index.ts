@@ -4,7 +4,7 @@ import { Bindings } from "./bindings";
 import patternRouter from "./routes/pattern.routes";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
-// import imageRouter from "./routes/image.routes";
+import imageRouter from "./routes/image.routes";
 import { bearerAuth } from "hono/bearer-auth";
 import { getCookie } from "hono/cookie";
 
@@ -19,14 +19,14 @@ app.use("*", (c, next) => {
   return next();
 });
 
-app.use(
-  "/api/*",
-  bearerAuth({
-    verifyToken: async (token, c) => {
-      return token === getCookie(c, "authToken");
-    },
-  })
-);
+// app.use(
+//   "/api/*",
+//   bearerAuth({
+//     verifyToken: async (token, c) => {
+//       return token === getCookie(c, "authToken");
+//     },
+//   })
+// );
 
 app.get("/", (c) => {
   return c.text("Honc! 🪿");
@@ -35,7 +35,7 @@ app.get("/", (c) => {
 app.route("/auth", authRouter);
 app.route("/api", patternRouter);
 app.route("/api", userRouter);
-// app.route("/api", imageRouter);
+app.route("/api", imageRouter);
 
 /**
  * Serve a simplified api specification for your API

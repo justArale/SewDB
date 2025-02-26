@@ -1,135 +1,71 @@
 import { Hono } from "hono";
+import { encodeBase64 } from "hono/utils/encode";
 import { Bindings } from "../bindings";
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
-import patternUploader from "../cloudinary/cloudinary";
-import avatarUploader from "../cloudinary/cloudinary";
-import { isAuthenticated } from "../../middleware/jwt.middleware";
-import { users, patterns } from "../db/schema";
-//import { Multer } from "multer";
+import { getCookie } from "hono/cookie";
 
 const imageRouter = new Hono<{ Bindings: Bindings }>();
 
-// Middleware für `multer` in Hono umwandeln
-// const multerMiddleware = (uploader: Multer) => {
-//   return async (c, next) => {
-//     await new Promise<void>((resolve, reject) => {
-//       uploader.single("file")(c.req.raw, {} as any, (err) => {
-//         if (err) {
-//           reject(err);
-//         } else {
-//           resolve();
-//         }
-//       });
-//     });
-//     await next();
-//   };
-// };
+const ALLOWED_FORMATS = ["jpg", "png", "webm", "jpeg", "gif", "heic", "webp"];
+// Universal Upload-Handler
+imageRouter.post("/upload/image/:folder", async (c) => {
+  try {
+    const body = await c.req.parseBody();
+    const image = body["image"] as File;
+    const folder = c.req.param("folder");
 
-// Upload-Route für Patterns
-imageRouter.post(
-  "/upload-pattern-image",
-  patternUploader.single("file"),
-  async (c) => {
-    const file = (c.req.raw as any).file;
-
-    if (!file) {
-      return c.json({ error: "No file uploaded!" }, 400);
+    if (!image) {
+      return c.json({ message: "No image provided" }, 400);
     }
 
-    return c.json({ fileUrl: file.path });
+    // Check format
+    const extension = image.name.split(".").pop()?.toLowerCase();
+    if (!extension || !ALLOWED_FORMATS.includes(extension)) {
+      return c.json({ message: `Invalid file format: ${extension}` }, 400);
+    }
+
+    // Check foldername
+    if (!["avatar", "pattern"].includes(folder)) {
+      return c.json({ message: "Invalid folder" }, 400);
+    }
+
+    // Convert to Base64 & upload to Cloudinary via fetch
+    const byteArrayBuffer = await image.arrayBuffer();
+    const base64 = encodeBase64(byteArrayBuffer);
+
+    // Prepare FormData for the upload
+    const formData = new FormData();
+    formData.append("file", `data:image/${extension};base64,${base64}`);
+    formData.append(
+      "upload_preset",
+      c.env.CLOUDINARY_PRESET || "default_preset" // Ensure this variable is correct
+    );
+    formData.append(
+      "folder",
+      folder === "avatar" ? "SewDB/avatar" : "SewDB/pattern" // ⬅️ Choose folder
+    );
+
+    // Use fetch for Cloudinary upload
+    const cloudinaryUploadUrl = `https://api.cloudinary.com/v1_1/${c.env.CLOUDINARY_NAME}/image/upload`;
+    const response = await fetch(cloudinaryUploadUrl, {
+      method: "POST",
+      body: formData,
+    });
+
+    const uploadResponse = (await response.json()) as any;
+
+    console.error("Cloudinary Upload Error:", uploadResponse);
+    if (!response.ok) {
+      throw new Error(
+        uploadResponse.error?.message || "Unknown Cloudinary error"
+      );
+    }
+
+    return c.json({ url: uploadResponse.secure_url });
+  } catch (err) {
+    console.error("Upload error:", err);
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    return c.json({ message: "Upload failed", error: errorMessage }, 500);
   }
-);
-
-// // Route for uploading pattern image
-// imageRouter.post(
-//   "/upload-pattern-image",
-//   isAuthenticated,
-//   patternUploader.single("file"),
-//   (c) => {
-//     console.log("file is: ", req.file);
-
-//     if (!req.file) {
-//       next(new Error("No file uploaded!"));
-//       return;
-//     }
-
-//     res.json({ fileUrl: req.file.path });
-//   }
-// );
-
-// imageRouter.post(
-//   "/upload-avatar",
-//   isAuthenticated,
-//   avatarUploader.single("file"),
-//   (c) => {
-//     console.log("file is: ", req.file);
-
-//     if (!req.file) {
-//       next(new Error("No file uploaded!"));
-//       return;
-//     }
-
-//     res.json({ fileUrl: req.file.path });
-//   }
-// );
-
-// // Route for deleting a recipe image
-// imageRouter.delete(
-//   "/delete-pattern-image/:publicId/:patternId",
-//   isAuthenticated,
-//   async (c) => {
-//     const { publicId, patternId } = c.params;
-
-//     try {
-//       // Delete image from cloudinary
-//       await cloudinary.uploader.destroy(`SewDB/pattern/${publicId}`);
-
-//       // Update the user document in the database to remove the reference to the avatar
-//       const updatedPattern = await Pattern.findByIdAndUpdate(
-//         patternId,
-//         { image: "" },
-//         { new: true }
-//       );
-
-//       if (!updatedPattern) {
-//         return res.status(404).json({ error: "Pattern not found" });
-//       }
-
-//       res
-//         .status(200)
-//         .json({ message: "Pattern image deleted", updatedPattern });
-//     } catch (error) {
-//       console.error("Error deleting pattern image:", error);
-//       res.status(500).json({ error: "Failed to delete the pattern image" });
-//     }
-//   }
-// );
-
-// // Route for deleting an avatar image
-// imageRouter.delete("/delete-avatar/:publicId", isAuthenticated, async (c) => {
-//   const { publicId } = req.params;
-
-//   try {
-//     // Delete image from cloudinary
-//     await cloudinary.uploader.destroy(`SewDB/avatar/${publicId}`);
-
-//     // Update the user document in the database to remove the reference to the avatar
-//     const updatedUser = await User.findByIdAndUpdate(
-//       req.payload._id,
-//       { avatar: "" },
-//       { new: true }
-//     );
-
-//     if (!updatedUser) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
-
-//     res.status(200).json({ message: "Avatar image deleted", updatedUser });
-//   } catch (error) {
-//     console.error("Error deleting avatar image:", error);
-//     res.status(500).json({ error: "Failed to delete the avatar image" });
-//   }
-// });
+});
 
 export default imageRouter;
