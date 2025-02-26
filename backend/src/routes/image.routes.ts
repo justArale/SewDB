@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { Bindings } from "../bindings";
-import { getCookie } from "hono/cookie";
 import { eq } from "drizzle-orm";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
@@ -79,15 +78,18 @@ imageRouter.post("/upload/image/:folder", async (c) => {
   }
 });
 
-// Universal Delete-Handler
-imageRouter.delete("/delete/image/:folder/:id", async (c) => {
+// Delete-Handler
+imageRouter.delete("/delete/image/:folder/:imageId/:id", async (c) => {
   try {
+    const sql = neon(c.env.DATABASE_URL);
+    const db = drizzle(sql);
     const folder = c.req.param("folder");
-    const publicId = `SewDB/${folder}/${c.req.param("id")}`;
+    const imageId = `SewDB/${folder}/${c.req.param("imageId")}`;
+    const id = Number(c.req.param("id"));
 
     // Signature for cloudinary
     const timestamp = Math.floor(Date.now() / 1000);
-    const stringToSign = `public_id=${publicId}&timestamp=${timestamp}${c.env.CLOUDINARY_SECRET}`;
+    const stringToSign = `public_id=${imageId}&timestamp=${timestamp}${c.env.CLOUDINARY_SECRET}`;
     const signature = crypto
       .createHash("sha1")
       .update(stringToSign)
@@ -95,7 +97,7 @@ imageRouter.delete("/delete/image/:folder/:id", async (c) => {
 
     // Cloudinary DELETE via POST-Request
     const formData = new FormData();
-    formData.append("public_id", publicId);
+    formData.append("public_id", imageId);
     formData.append("timestamp", String(timestamp));
     formData.append("api_key", String(c.env.CLOUDINARY_KEY));
     formData.append("signature", signature);
@@ -114,13 +116,20 @@ imageRouter.delete("/delete/image/:folder/:id", async (c) => {
         deleteResponse.error?.message || "Unknown Cloudinary error"
       );
     }
+
     if (deleteResponse.result === "not found") {
       return c.json({ message: "Image not found or already deleted" }, 404);
     }
 
-    console.log("delete response", deleteResponse.result);
+    const updatePattern = await db
+      .update(patterns)
+      .set({ image: "", updatedAt: new Date() })
+      .where(eq(patterns.id, id));
 
-    return c.json({ message: "Image deleted successfully" });
+    return c.json({
+      message: "Image deleted successfully",
+      updatePattern: "Pattern successfully updated",
+    });
   } catch (err) {
     console.error("Error deleting image:", err);
     return c.json({ message: "Delete failed", error: err }, 500);
