@@ -20,8 +20,6 @@
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.0",
     "miniflare": "^3.20250214.0",
-    "multer": "^1.4.5-lts.1",
-    "multer-storage-cloudinary": "^4.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
