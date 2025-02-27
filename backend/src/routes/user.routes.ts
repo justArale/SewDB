@@ -36,7 +36,7 @@ userRouter.put("/users/:id", async (c) => {
   const sql = neon(c.env.DATABASE_URL);
   const db = drizzle(sql);
   const id = Number(c.req.param("id"));
-  const { name, email, password, likes } = await c.req.json();
+  const { name, email, password } = await c.req.json();
 
   // User exists?
   const userExists = await db
@@ -55,7 +55,6 @@ userRouter.put("/users/:id", async (c) => {
       name,
       email,
       password,
-      likes,
       updatedAt: new Date(),
     })
     .where(eq(users.id, id));
