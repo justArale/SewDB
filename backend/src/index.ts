@@ -5,6 +5,7 @@ import patternRouter from "./routes/pattern.routes";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
 import imageRouter from "./routes/image.routes";
+import likeRouter from "./routes/like.routes";
 import { bearerAuth } from "hono/bearer-auth";
 import { getCookie } from "hono/cookie";
 
@@ -36,6 +37,7 @@ app.route("/auth", authRouter);
 app.route("/api", patternRouter);
 app.route("/api", userRouter);
 app.route("/api", imageRouter);
+app.route("/api", likeRouter);
 
 /**
  * Serve a simplified api specification for your API
