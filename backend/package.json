@@ -17,7 +17,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.39.3",
+    "drizzle-orm": "^0.40.0",
     "hono": "^4.7.0",
     "miniflare": "^3.20250214.0",
     "zod": "^3.23.8"

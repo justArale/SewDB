@@ -1,4 +1,4 @@
-import { json } from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
 import {
   jsonb,
   pgTable,
@@ -6,10 +6,13 @@ import {
   text,
   timestamp,
   boolean,
+  integer,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 export type NewUser = typeof users.$inferInsert;
 export type NewPattern = typeof patterns.$inferInsert;
+export type NewUserLike = typeof usersToPatterns.$inferInsert;
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -22,6 +25,10 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const usersRelations = relations(users, ({ many }) => ({
+  usersToPatterns: many(usersToPatterns),
+}));
+
 export const patterns = pgTable("patterns", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -32,3 +39,20 @@ export const patterns = pgTable("patterns", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const patternRelations = relations(patterns, ({ many }) => ({
+  usersToPatterns: many(usersToPatterns),
+}));
+
+export const usersToPatterns = pgTable(
+  "usersToPatterns",
+  {
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    patternId: integer("pattern_id")
+      .notNull()
+      .references(() => patterns.id, { onDelete: "cascade" }),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.patternId] })]
+);
