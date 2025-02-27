@@ -3,13 +3,12 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { patterns } from "../db/schema";
 import { Bindings } from "../bindings";
-import { eq, arrayContains } from "drizzle-orm";
+import { eq, and, arrayContains } from "drizzle-orm";
 
 const patternRouter = new Hono<{ Bindings: Bindings }>();
 
 // GET all patterns
 patternRouter.get("/patterns", async (c) => {
-  console.log("DATABASE_URL:", c.env.DATABASE_URL);
   const sql = neon(c.env.DATABASE_URL);
   const db = drizzle(sql);
 
@@ -37,44 +36,58 @@ patternRouter.get("/patterns/:id", async (c) => {
 });
 
 // GET patterns dynamically by searchParam
-patternRouter.get("/patterns/:searchParam/:searchParamId", async (c) => {
-  const sql = neon(c.env.DATABASE_URL);
-  const db = drizzle(sql);
-  const searchParam = c.req.param("searchParam");
-  const searchParamId = c.req.param("searchParamId");
+patternRouter.get(
+  "/patterns/:primaryParam/:primaryValue/:secondaryParam?/:secondaryValue?",
+  async (c) => {
+    const sql = neon(c.env.DATABASE_URL);
+    const db = drizzle(sql);
+    const primaryParam = c.req.param("primaryParam");
+    const primaryValue = c.req.param("primaryValue");
+    const secondaryParam = c.req.param("secondaryParam");
+    const secondaryValue = c.req.param("secondaryValue");
 
-  console.log(`Searching for ${searchParam} with Id ${searchParamId}`);
+    let query = db
+      .select()
+      .from(patterns)
+      .where(
+        eq(patterns[primaryParam as keyof typeof patterns] as any, primaryValue)
+      );
 
-  const patternsBySearchParam = await db
-    .select()
-    .from(patterns)
-    .where(
-      arrayContains(
-        patterns[searchParam as keyof typeof patterns] as any,
-        searchParamId
-      )
-    );
+    const patternsBySearchParam = await db
+      .select()
+      .from(patterns)
+      .where(
+        and(
+          eq(
+            patterns[primaryParam as keyof typeof patterns] as any,
+            primaryValue
+          ),
+          arrayContains(
+            patterns[secondaryParam as keyof typeof patterns] as any,
+            secondaryValue
+          )
+        )
+      );
 
-  if (patternsBySearchParam.length === 0) {
-    return c.json(
-      { message: `No patterns found for this ${searchParam}` },
-      404
-    );
+    if (patternsBySearchParam.length === 0) {
+      return c.json({ message: "No patterns found for this search" }, 404);
+    }
+
+    return c.json(patternsBySearchParam);
   }
-
-  return c.json(patternsBySearchParam);
-});
+);
 
 // POST new pattern
 patternRouter.post("/patterns", async (c) => {
-  const { name, image, category, sizes, source } = await c.req.json();
+  const { name, image, category, sizes, source, intendedFor } =
+    await c.req.json();
 
   const sql = neon(c.env.DATABASE_URL);
   const db = drizzle(sql);
 
   const newPattern = await db
     .insert(patterns)
-    .values({ name, image, category, sizes, source })
+    .values({ name, image, category, sizes, source, intendedFor })
     .returning();
 
   return c.json(newPattern[0]);
@@ -85,7 +98,8 @@ patternRouter.put("/patterns/:id", async (c) => {
   const sql = neon(c.env.DATABASE_URL);
   const db = drizzle(sql);
   const id = Number(c.req.param("id"));
-  const { name, image, category, sizes, source } = await c.req.json();
+  const { name, image, category, sizes, source, intendedFor } =
+    await c.req.json();
 
   //Pattern exists?
   const patternExists = await db
@@ -106,6 +120,7 @@ patternRouter.put("/patterns/:id", async (c) => {
       category,
       sizes,
       source,
+      intendedFor,
       updatedAt: new Date(),
     })
     .where(eq(patterns.id, id));

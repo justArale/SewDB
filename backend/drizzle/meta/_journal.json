@@ -15,6 +15,13 @@
       "when": 1740647038198,
       "tag": "0001_blushing_wendigo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740665605113,
+      "tag": "0002_foamy_lady_mastermind",
+      "breakpoints": true
     }
   ]
 }

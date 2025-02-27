@@ -32,6 +32,7 @@ export const patterns = pgTable("patterns", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   image: text("image"),
+  intendedFor: text("intended_for").notNull(),
   category: jsonb("category").notNull(),
   sizes: jsonb("sizes").notNull(),
   source: jsonb("source"),
