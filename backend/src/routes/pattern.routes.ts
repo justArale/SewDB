@@ -35,7 +35,7 @@ patternRouter.get("/patterns/:id", async (c) => {
   return c.json({ patterns: pattern[0] });
 });
 
-// GET patterns dynamically by searchParam
+// GET patterns by search params
 patternRouter.get(
   "/patterns/:primaryParam/:primaryValue/:secondaryParam?/:secondaryValue?",
   async (c) => {
@@ -46,14 +46,7 @@ patternRouter.get(
     const secondaryParam = c.req.param("secondaryParam");
     const secondaryValue = c.req.param("secondaryValue");
 
-    let query = db
-      .select()
-      .from(patterns)
-      .where(
-        eq(patterns[primaryParam as keyof typeof patterns] as any, primaryValue)
-      );
-
-    const patternsBySearchParam = await db
+    const patternsBySearchParams = await db
       .select()
       .from(patterns)
       .where(
@@ -62,18 +55,20 @@ patternRouter.get(
             patterns[primaryParam as keyof typeof patterns] as any,
             primaryValue
           ),
-          arrayContains(
-            patterns[secondaryParam as keyof typeof patterns] as any,
-            secondaryValue
-          )
+          secondaryParam && secondaryValue
+            ? arrayContains(
+                patterns[secondaryParam as keyof typeof patterns] as any,
+                secondaryValue
+              )
+            : undefined
         )
       );
 
-    if (patternsBySearchParam.length === 0) {
+    if (patternsBySearchParams.length === 0) {
       return c.json({ message: "No patterns found for this search" }, 404);
     }
 
-    return c.json(patternsBySearchParam);
+    return c.json(patternsBySearchParams);
   }
 );
 

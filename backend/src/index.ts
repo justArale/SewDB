@@ -20,14 +20,14 @@ app.use("*", (c, next) => {
   return next();
 });
 
-app.use(
-  "/api/*",
-  bearerAuth({
-    verifyToken: async (token, c) => {
-      return token === getCookie(c, "authToken");
-    },
-  })
-);
+// app.use(
+//   "/api/*",
+//   bearerAuth({
+//     verifyToken: async (token, c) => {
+//       return token === getCookie(c, "authToken");
+//     },
+//   })
+// );
 
 app.get("/", (c) => {
   return c.text("Honc! 🪿");
