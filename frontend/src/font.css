@@ -1,0 +1,53 @@
+/* Regular */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../src/assets/font/OpenSans-Regular.ttf") format("truetype");
+}
+
+/* Medium */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../src/assets/font/OpenSans-Medium.ttf") format("truetype");
+}
+
+/* semiBold */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../src/assets/font/OpenSans-SemiBold.ttf") format("truetype");
+}
+
+/* Regular */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../src/assets/font/Unbounded-Regular.ttf") format("truetype");
+}
+
+/* Medium */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../src/assets/font/Unbounded-Medium.ttf") format("truetype");
+}
+
+/* semiBold */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../src/assets/font/Unbounded-SemiBold.ttf") format("truetype");
+}
