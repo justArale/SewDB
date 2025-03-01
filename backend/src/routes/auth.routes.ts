@@ -6,7 +6,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from "drizzle-orm";
 import { logger } from "hono/logger";
 import { z } from "zod";
-import { sign } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 import { getCookie, setCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
 
@@ -26,6 +26,7 @@ const loginSchema = z.object({
   password: z.string().min(6),
 });
 
+// Signup Route
 authRouter.post("/signup", async (c) => {
   const { email, password, name, isAdmin } = signupSchema.parse(
     await c.req.json()
@@ -84,6 +85,7 @@ authRouter.post("/signup", async (c) => {
   }
 });
 
+// Login Route
 authRouter.post("/login", async (c) => {
   try {
     const { email, password } = loginSchema.parse(await c.req.json());
@@ -118,7 +120,13 @@ authRouter.post("/login", async (c) => {
       };
 
       const authToken = await sign(payload, c.env.TOKEN_SECRET);
-      setCookie(c, "authToken", authToken);
+      setCookie(c, "authToken", authToken, {
+        httpOnly: true,
+        //secure: true,
+        sameSite: "Lax",
+        path: "/",
+        maxAge: 600 * 600,
+      });
 
       return c.json({ authToken });
     } else {
@@ -130,13 +138,26 @@ authRouter.post("/login", async (c) => {
   }
 });
 
-// 🚀 Verify Route mit Auth Middleware
-// authRouter.get("/verify", isAuthenticated, async (c) => {
-//   const payload = c.get("payload");
-//   if (!payload) {
-//     return c.json({ message: "Unauthorized" }, 401);
-//   }
-//   return c.json(payload);
-// });
+// Verify Route
+authRouter.get("/verify", async (c) => {
+  const authToken = getCookie(c, "authToken");
+  if (!authToken) {
+    return c.json({ message: "Unauthorized" }, 401);
+  }
+
+  try {
+    const payload = await verify(authToken, c.env.TOKEN_SECRET);
+    return c.json(payload);
+  } catch (error) {
+    return c.json({ message: "Token invalid or expired" }, 401);
+  }
+});
+
+// Logout Route
+authRouter.post("/logout", (c) => {
+  setCookie(c, "authToken", "", { path: "/", maxAge: -1 });
+
+  return c.json({ message: "Logged out successfully" });
+});
 
 export default authRouter;

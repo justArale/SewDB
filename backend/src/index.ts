@@ -6,28 +6,41 @@ import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
 import imageRouter from "./routes/image.routes";
 import likeRouter from "./routes/like.routes";
-import { bearerAuth } from "hono/bearer-auth";
 import { getCookie } from "hono/cookie";
+import { verify } from "hono/jwt";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Middleware to add CORS headers
-app.use("*", (c, next) => {
-  c.header("Access-Control-Allow-Origin", "*");
-  c.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+app.use("*", async (c, next) => {
+  c.header("Access-Control-Allow-Origin", c.env.ORIGIN);
+  c.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   c.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  c.header("Access-Control-Allow-Credentials", "true");
 
-  return next();
+  // Handle OPTIONS preflight requests properly
+  if (c.req.method === "OPTIONS") {
+    return c.text("OK", 200);
+  }
+
+  await next();
 });
 
-app.use(
-  "/api/*",
-  bearerAuth({
-    verifyToken: async (token, c) => {
-      return token === getCookie(c, "authToken");
-    },
-  })
-);
+app.use("/api/*", async (c, next) => {
+  const authToken = getCookie(c, "authToken");
+
+  if (!authToken) {
+    return c.json({ message: "Unauthorized" }, 401);
+  }
+
+  try {
+    const payload = await verify(authToken, c.env.TOKEN_SECRET);
+
+    await next();
+  } catch (error) {
+    return c.json({ message: "Token invalid or expired" }, 401);
+  }
+});
 
 app.get("/", (c) => {
   return c.text("Honc! 🪿");
