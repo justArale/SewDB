@@ -1,51 +1,80 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import AboutPage from "./AboutPage";
+import { AuthContext } from "../context/auth.context";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-interface User {
+interface Patterns {
   id: string;
   name: string;
-  email: string;
+  image: string;
+  sizes: [];
+  category: [];
+  source: [];
+  intendedFor: string;
 }
 
 const DashboardPage: React.FC = () => {
-  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const authContext = useContext(AuthContext);
+  const isLoggedIn = authContext ? authContext.isLoggedIn : false;
+  const [allPatterns, setAllPatterns] = useState<Patterns[]>([]);
 
-  const getAllUsers = () => {
+  const getAllPatterns = () => {
     axios
-      .get(`${API_URL}/api/users`)
+      .get(`${API_URL}/api/patterns`, {
+        withCredentials: true,
+      })
       .then((response) => {
-        setAllUsers(response.data.users);
+        setAllPatterns(response.data);
       })
       .catch((error) => {
-        console.log(error.response?.data?.message);
+        console.log("catcherror:", error);
+        if (error.response) {
+          console.log("Server Error:", error.response?.data?.message);
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+        } else {
+          console.log("Error setting up the request:", error.message);
+        }
       });
   };
 
   useEffect(() => {
-    getAllUsers();
-  }, []);
+    if (isLoggedIn) {
+      console.log("getAllPatterns called inside of isLoggedIn");
 
-  useEffect(() => {
-    console.log("Show response:", allUsers);
-  }, [allUsers]);
+      getAllPatterns();
+    }
+  }, [isLoggedIn]);
 
   return (
-    allUsers && (
-      <div className="recipe-columns">
-        <div className="left-column"></div>
-        <div className="right-column">
-          <h1>Users</h1>
-          {allUsers.map((user) => (
-            <div key={user.id} className="recipe-card">
-              <h2>{user.name}</h2>
-              <p>{user.email}</p>
+    <div>
+      {isLoggedIn ? (
+        allPatterns && (
+          <div className="">
+            <div className=""></div>
+            <div className="">
+              <h1>Patterns</h1>
+              {allPatterns.map((pattern) => (
+                <div key={pattern.id} className="">
+                  <h2>{pattern.name}</h2>
+                  <p>Kategorie: {pattern.category.join(", ")}</p>
+                  <p>Größen: {pattern.sizes.join(", ")}</p>
+                  <p>Quelle: {pattern.source.join(", ")}</p>
+                  <p>Intended for: {pattern.intendedFor}</p>
+                  {pattern.image && (
+                    <img src={pattern.image} alt={pattern.name} />
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-    )
+          </div>
+        )
+      ) : (
+        <AboutPage />
+      )}
+    </div>
   );
 };
 
