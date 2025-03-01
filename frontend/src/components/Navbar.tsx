@@ -17,6 +17,11 @@ interface NavProps {
   setIsLogin: Dispatch<SetStateAction<boolean>>;
 }
 
+interface User {
+  id: string;
+  isAdmin: boolean;
+}
+
 const Navbar: React.FC<NavProps> = ({
   isOverlayOpen,
   handleLoginClick,
@@ -27,7 +32,7 @@ const Navbar: React.FC<NavProps> = ({
   const location = useLocation();
   const authContext = useContext(AuthContext);
   const isLoggedIn = authContext?.isLoggedIn ?? false;
-  const user = authContext?.user;
+  const user: User | null = authContext?.user ?? null;
   const logOutUser = authContext?.logOutUser ?? (() => {});
   const navigate = useNavigate();
 
@@ -99,17 +104,21 @@ const Navbar: React.FC<NavProps> = ({
             </div>
           )}
           <div className="action">
-            <div>
-              <button
-                className="mainFont noUnderline primaryColor buttonReverse"
-                onClick={handleButtonClick}
-              >
-                <div className="buttonContentWrapper">
-                  <Add width="16" height="16" color="#FFF" />
-                  <span className="buttonFont buttonFontReverse">Recipe</span>
-                </div>
-              </button>
-            </div>
+            {user?.isAdmin && (
+              <div>
+                <button
+                  className="mainFont noUnderline primaryColor buttonReverse"
+                  onClick={handleButtonClick}
+                >
+                  <div className="buttonContentWrapper">
+                    <Add width="16" height="16" color="#FFF" />
+                    <span className="buttonFont buttonFontReverse">
+                      Pattern
+                    </span>
+                  </div>
+                </button>
+              </div>
+            )}
             {isLoggedIn ? (
               <div>
                 <button
