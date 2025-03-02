@@ -117,6 +117,7 @@ authRouter.post("/login", async (c) => {
         email: user.email,
         name: user.name,
         exp: Math.floor(Date.now() / 1000) + 6 * 60,
+        isAdmin: user.isAdmin,
       };
 
       const authToken = await sign(payload, c.env.TOKEN_SECRET);
