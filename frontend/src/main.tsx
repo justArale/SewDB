@@ -1,4 +1,5 @@
-import "./index.css";
+// import "./index.css";
+import "./assets/sass/main.sass";
 import App from "./App.tsx";
 import React from "react";
 import ReactDOM from "react-dom/client";

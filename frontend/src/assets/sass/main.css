@@ -1,0 +1,240 @@
+/* Regular */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/OpenSans-Regular.ttf");
+}
+/* Regular */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/Unbounded-Regular.ttf");
+}
+/* Regular */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/OpenSans-Regular.ttf");
+}
+/* Regular */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/Unbounded-Regular.ttf");
+}
+/* Regular */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/OpenSans-Regular.ttf");
+}
+/* Regular */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/Unbounded-Regular.ttf");
+}
+body {
+  background-color: #f5f5f5;
+  font-family: "Unbounded", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.header {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 64px 0 32px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.inner {
+  width: 100%;
+  display: flex;
+  padding: 0 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-title {
+  display: flex;
+  gap: 12px;
+  height: auto;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.logoWrapper {
+  width: 48px;
+  height: 48px;
+}
+
+.logoImage {
+  max-height: 100%;
+  max-width: 100%;
+  -o-object-position: center;
+     object-position: center;
+}
+
+.navigation {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.home.active,
+.about.active,
+.profil.active {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+}
+
+@media (max-width: 1024px) {
+  .inner {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    gap: 16px;
+  }
+  .navigation {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+}
+/* Regular */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/OpenSans-Regular.ttf");
+}
+/* Regular */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/Unbounded-Regular.ttf");
+}
+.pageTitle {
+  font-family: "Unbounded", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: var(--font-size-xlarge);
+  font-weight: var(--font-weight-semiBold);
+  line-height: 1.5em;
+  margin: 0;
+}
+
+/* Regular */
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/OpenSans-Regular.ttf");
+}
+/* Regular */
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("src/assets/font/Unbounded-Regular.ttf");
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.overlay-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.overlay-content {
+  position: relative;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 20px;
+  z-index: 1001;
+  max-width: 500px;
+  width: 82vw;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 10px 40px 40px;
+  box-sizing: border-box;
+}
+
+.sign-up {
+  padding: 40px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.signUpInput {
+  padding: 12px 24px;
+  border-radius: 40px;
+  border: 1px solid black;
+  background-color: var(--background-color);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.becomePrivateButton {
+  background-color: var(--main-color);
+}
+
+.hiddenSignUp {
+  color: var(--background-color);
+  position: relative;
+  left: 5px;
+  cursor: default;
+}
+
+@media (max-width: 470px) {
+  .login {
+    padding: 10px 28px 28px;
+  }
+  .sign-up {
+    padding: 28px;
+  }
+}/*# sourceMappingURL=main.css.map */

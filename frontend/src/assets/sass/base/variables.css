@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../../font/OpenSans-Regular.ttf");
+}
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../../font/Unbounded-Regular.ttf");
+}/*# sourceMappingURL=variables.css.map */

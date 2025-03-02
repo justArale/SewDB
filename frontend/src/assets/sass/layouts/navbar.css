@@ -1,0 +1,53 @@
+.header {
+  width: 100%;
+  margin: 0;
+  padding: 64px 0 32px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.inner {
+  width: 100%;
+  display: flex;
+  padding: 0 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-title {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.logoWrapper {
+  width: 48px;
+  height: 48px;
+}
+
+.logoImage {
+  max-height: 100%;
+  max-width: 100%;
+  -o-object-position: center;
+     object-position: center;
+}
+
+.navigation {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 1024px) {
+  .inner {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    gap: 16px;
+  }
+  .navigation {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+}/*# sourceMappingURL=navbar.css.map */
