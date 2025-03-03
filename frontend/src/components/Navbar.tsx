@@ -38,7 +38,7 @@ const Navbar: React.FC<NavProps> = ({
 
   const handleButtonClick = () => {
     if (isLoggedIn) {
-      navigate("/user/recipes/new");
+      navigate("/patterns/new");
     } else {
       handleLoginClick();
     }
