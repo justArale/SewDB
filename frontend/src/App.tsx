@@ -4,6 +4,7 @@ import "./App.css";
 import DashboardPage from "./pages/DashboardPage";
 import ErrorPage from "./pages/ErrorPage";
 import Navbar from "./components/Navbar";
+import NewPatternPage from "./pages/NewPatternPage";
 
 function App() {
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
@@ -29,6 +30,7 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/patterns/new" element={<NewPatternPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>
