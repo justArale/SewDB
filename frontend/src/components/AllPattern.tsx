@@ -58,9 +58,9 @@ const AllPattern: React.FC = () => {
             {allPatterns.map((pattern) => (
               <div key={pattern.id} className="">
                 <h2>{pattern.name}</h2>
-                <p>Kategorie: {pattern.category.join(", ")}</p>
-                <p>Größen: {pattern.sizes.join(", ")}</p>
-                <p>Quelle: {pattern.source.join(", ")}</p>
+                <p>Category: {pattern.category.join(", ")}</p>
+                <p>Sizes: {pattern.sizes.join(", ")}</p>
+                <p>Source: {pattern.source.join(", ")}</p>
                 <p>Intended for: {pattern.intendedFor}</p>
                 {pattern.image && (
                   <img src={pattern.image} alt={pattern.name} />
