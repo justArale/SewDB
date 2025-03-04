@@ -40,9 +40,9 @@ const PatternDetailPage: React.FC = () => {
           <h3>Current pattern: {currentPattern.name}</h3>
           <ul>
             <li>Intended for: {currentPattern.intendedFor}</li>
-            <li>Sizes: {currentPattern.sizes}</li>
-            <li>Category: {currentPattern.category}</li>
-            <li>Source: {currentPattern.source}</li>
+            <li>Sizes: {currentPattern.sizes.join(", ")}</li>
+            <li>Category: {currentPattern.category.join(", ")}</li>
+            <li>Source: {currentPattern.source.join(", ")}</li>
           </ul>
           {currentPattern.image && (
             <img src={currentPattern.image} alt={currentPattern.name} />
