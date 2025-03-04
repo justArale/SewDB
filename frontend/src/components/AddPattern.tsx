@@ -207,9 +207,14 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     }
   };
 
-  const addNewField = () => {
-    setSizes([...sizes, ""]);
-    setCategory([...category, ""]);
+  const addNewField = (field: "sizes" | "category" | "source") => {
+    const updateField = {
+      sizes: () => setSizes([...sizes, ""]),
+      category: () => setCategory([...category, ""]),
+      source: () => setSource([...source, ""]),
+    };
+
+    updateField[field]?.();
   };
 
   const jumpToTop = () => {
@@ -276,7 +281,11 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleCategoryInput(e, index)
               }
-              onClick={index === category.length - 1 ? addNewField : undefined}
+              onClick={
+                index === category.length - 1
+                  ? () => addNewField("category")
+                  : undefined
+              }
             />
           ))}
           {sizes.map((size, index) => (
@@ -287,7 +296,11 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
               placeholder="Size..."
               value={size}
               onChange={(e) => handleSizesInput(e, index)}
-              onClick={index === sizes.length - 1 ? addNewField : undefined}
+              onClick={
+                index === sizes.length - 1
+                  ? () => addNewField("sizes")
+                  : undefined
+              }
             />
           ))}
           {source.map((sour, index) => (
@@ -298,6 +311,11 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
               placeholder="Source..."
               value={sour}
               onChange={(e) => handleSourceInput(e, index)}
+              onClick={
+                index === source.length - 1
+                  ? () => addNewField("source")
+                  : undefined
+              }
             />
           ))}
         </div>
