@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import "./App.css";
+import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import ErrorPage from "./pages/ErrorPage";
 import Navbar from "./components/Navbar";
@@ -30,7 +31,9 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<DashboardPage />} />
-        <Route path="/patterns/new" element={<NewPatternPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/patterns/new" element={<NewPatternPage />} />
+        </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>
