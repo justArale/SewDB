@@ -1,0 +1,56 @@
+import React from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+interface Pattern {
+  name: string;
+  image: string;
+  intendedFor: string;
+  sizes: [];
+  category: [];
+  source: [];
+}
+
+const PatternDetailPage: React.FC = () => {
+  const { patternId } = useParams();
+  const [currentPattern, setCurrentPattern] = useState<Pattern | null>(null);
+
+  const fetchPatternData = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/patterns/${patternId}`, {
+        withCredentials: true,
+      });
+      setCurrentPattern(response.data.patterns);
+    } catch (error) {
+      console.error("Error fetching the pattern data: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPatternData();
+  }, [patternId]);
+
+  return (
+    <div>
+      {currentPattern && (
+        <div>
+          <h3>Current pattern: {currentPattern.name}</h3>
+          <ul>
+            <li>Intended for: {currentPattern.intendedFor}</li>
+            <li>Sizes: {currentPattern.sizes}</li>
+            <li>Category: {currentPattern.category}</li>
+            <li>Source: {currentPattern.source}</li>
+          </ul>
+          {currentPattern.image && (
+            <img src={currentPattern.image} alt={currentPattern.name} />
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PatternDetailPage;

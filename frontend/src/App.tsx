@@ -7,6 +7,7 @@ import ErrorPage from "./pages/ErrorPage";
 import Navbar from "./components/Navbar";
 import NewPatternPage from "./pages/NewPatternPage";
 import EditPatternPage from "./pages/EditPatternPage";
+import PatternDetailPage from "./pages/PatternDetailPage";
 
 function App() {
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
@@ -33,6 +34,7 @@ function App() {
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route element={<ProtectedRoute />}>
+          <Route path="/patterns/:patternId" element={<PatternDetailPage />} />
           <Route path="/patterns/new" element={<NewPatternPage />} />
           <Route
             path="/patterns/:patternId/edit"
