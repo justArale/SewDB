@@ -17,9 +17,9 @@ interface Pattern {
   name: string;
   intendedFor: string;
   image: string;
-  category: { name: string }[];
-  sizes: { name: string }[];
-  source: { name: string }[];
+  category: string[];
+  sizes: string[];
+  source: string[];
 }
 
 const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
@@ -51,15 +51,30 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     if (existingPattern) {
       setName(existingPattern.name);
       setIntendedFor(existingPattern.intendedFor);
+  
       setImg(existingPattern.image);
       setCategory(
-        existingPattern.category.map((cate: { name: string }) => cate.name)
+        Array.isArray(existingPattern.category) &&
+          existingPattern.category.length > 0
+          ? existingPattern.category.map((cat) => {
+              return cat;
+            })
+          : [""]
       );
       setSizes(
-        existingPattern.sizes.map((size: { name: string }) => size.name)
+        Array.isArray(existingPattern.sizes) && existingPattern.sizes.length > 0
+          ? existingPattern.sizes.map((size) => {
+              return size;
+            })
+          : [""]
       );
       setSource(
-        existingPattern.source.map((sour: { name: string }) => sour.name)
+        Array.isArray(existingPattern.source) &&
+          existingPattern.source.length > 0
+          ? existingPattern.source.map((sour) => {
+              return sour;
+            })
+          : [""]
       );
     }
   }, [existingPattern]);
@@ -127,7 +142,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     index: number
   ) => {
     const updatedCategory = [...category];
-    updatedCategory[index] = e.target.value;
+    updatedCategory[index] = e.target.value || "";
     setCategory(updatedCategory);
   };
 
@@ -136,7 +151,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     index: number
   ) => {
     const updatedSizes = [...sizes];
-    updatedSizes[index] = e.target.value;
+    updatedSizes[index] = e.target.value || "";
     setSizes(updatedSizes);
   };
 
@@ -145,7 +160,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     index: number
   ) => {
     const updatedSource = [...source];
-    updatedSource[index] = e.target.value;
+    updatedSource[index] = e.target.value || "";
     setSource(updatedSource);
   };
 
@@ -272,51 +287,57 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
             )}
           </label>
           {category.map((cat, index) => (
-            <input
-              type="text"
-              name="category"
-              className="mainFont"
-              placeholder="Category..."
-              value={cat}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleCategoryInput(e, index)
-              }
-              onClick={
-                index === category.length - 1
-                  ? () => addNewField("category")
-                  : undefined
-              }
-            />
+            <div key={index}>
+              <input
+                type="text"
+                name="category"
+                className="mainFont"
+                placeholder="Category..."
+                value={cat}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleCategoryInput(e, index)
+                }
+                onClick={
+                  index === category.length - 1
+                    ? () => addNewField("category")
+                    : undefined
+                }
+              />
+            </div>
           ))}
           {sizes.map((size, index) => (
-            <input
-              type="text"
-              name="size"
-              className="mainFont"
-              placeholder="Size..."
-              value={size}
-              onChange={(e) => handleSizesInput(e, index)}
-              onClick={
-                index === sizes.length - 1
-                  ? () => addNewField("sizes")
-                  : undefined
-              }
-            />
+            <div key={index}>
+              <input
+                type="text"
+                name="size"
+                className="mainFont"
+                placeholder="Size..."
+                value={size}
+                onChange={(e) => handleSizesInput(e, index)}
+                onClick={
+                  index === sizes.length - 1
+                    ? () => addNewField("sizes")
+                    : undefined
+                }
+              />
+            </div>
           ))}
           {source.map((sour, index) => (
-            <input
-              type="text"
-              name="source"
-              className="mainFont"
-              placeholder="Source..."
-              value={sour}
-              onChange={(e) => handleSourceInput(e, index)}
-              onClick={
-                index === source.length - 1
-                  ? () => addNewField("source")
-                  : undefined
-              }
-            />
+            <div key={index}>
+              <input
+                type="text"
+                name="source"
+                className="mainFont"
+                placeholder="Source..."
+                value={sour}
+                onChange={(e) => handleSourceInput(e, index)}
+                onClick={
+                  index === source.length - 1
+                    ? () => addNewField("source")
+                    : undefined
+                }
+              />
+            </div>
           ))}
         </div>
         <div className="action">
