@@ -1,8 +1,9 @@
 // PatternDetailPage.tsx
 import React from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -18,6 +19,8 @@ interface Pattern {
 const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
   const [currentPattern, setCurrentPattern] = useState<Pattern | null>(null);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user;
 
   const fetchPatternData = async () => {
     try {
@@ -50,9 +53,11 @@ const PatternDetailPage: React.FC = () => {
           )}
         </div>
       )}
-      <Link to={`/patterns/${patternId}/edit`} state={{ currentPattern }}>
-        <button>Edit</button>
-      </Link>
+      {user?.isAdmin && (
+        <Link to={`/patterns/${patternId}/edit`} state={{ currentPattern }}>
+          <button>Edit</button>
+        </Link>
+      )}
     </div>
   );
 };
