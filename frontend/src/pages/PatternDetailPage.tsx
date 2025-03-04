@@ -1,7 +1,8 @@
+// PatternDetailPage.tsx
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -49,6 +50,9 @@ const PatternDetailPage: React.FC = () => {
           )}
         </div>
       )}
+      <Link to={`/patterns/${patternId}/edit`} state={{ currentPattern }}>
+        <button>Edit</button>
+      </Link>
     </div>
   );
 };
