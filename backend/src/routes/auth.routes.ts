@@ -116,7 +116,7 @@ authRouter.post("/login", async (c) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        exp: Math.floor(Date.now() / 1000) + 6 * 60,
+        exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 1 week in seconds
         isAdmin: user.isAdmin,
       };
 
