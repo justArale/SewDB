@@ -118,6 +118,9 @@ const Navbar: React.FC<NavProps> = ({
                     </span>
                   </div>
                 </button>
+                <Link to={`/users`}>
+                  <button>All Users</button>
+                </Link>
               </div>
             )}
             {isLoggedIn ? (

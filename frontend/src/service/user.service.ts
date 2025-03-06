@@ -46,7 +46,20 @@ export const logoutUser = async () => {
   }
 };
 
+export const getAllUsers = async () => {
+  try {
+    const response = await API.get(`/api/users`);
+    console.log("all users response", response);
+    console.log("all users response.data", response.data.users);
+    return response.data.users;
+  } catch (error) {
+    console.error("Error getting all users: ", error);
+    return [];
+  }
+};
+
 export default {
   authenticateUser,
   logoutUser,
+  getAllUsers,
 };
