@@ -1,17 +1,14 @@
 // AddPattern.tsx
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import fileUploadService from "../service/file-upload.service";
-import { AuthContext } from "../context/auth.context";
+import {
+  uploadPatternImage,
+  deletePatternImage,
+} from "../service/image.service";
 import axios from "axios";
-import { extractPublicId } from "cloudinary-build-url";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-interface User {
-  isAdmin: boolean;
-}
 
 interface Pattern {
   name: string;
@@ -25,17 +22,13 @@ interface Pattern {
 const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   existingPattern,
 }) => {
-  const authContext = useContext(AuthContext);
-  const user: User | null = authContext?.user ?? null;
   const { patternId } = useParams<{ patternId: string }>();
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [errorMessageMain, setErrorMessageMain] = useState<string>("");
-  const [errorMessageIngredient, setErrorMessageIngredient] =
-    useState<string>("");
-  const [errorMessageInstruction, setErrorMessageInstruction] =
-    useState<string>("");
-  const [oldImageId, setOldImageId] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [errorMessageMain, setErrorMessageMain] = useState<string>("");
+  // const [errorMessageIngredient, setErrorMessageIngredient] = useState<string>("");
+  // const [errorMessageInstruction, setErrorMessageInstruction] = useState<string>("");
+  const [oldImageUrl, setOldImageUrl] = useState<string>();
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imageIsLoading, setImageIsLoading] = useState<boolean>(false);
 
   let navigate = useNavigate();
@@ -51,7 +44,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     if (existingPattern) {
       setName(existingPattern.name);
       setIntendedFor(existingPattern.intendedFor);
-  
+
       setImg(existingPattern.image);
       setCategory(
         Array.isArray(existingPattern.category) &&
@@ -90,13 +83,13 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
       }
 
       const file = event.target.files[0];
-      const oldId = getOldImageId(img);
-      setOldImageId(oldId);
+
+      existingPattern?.image && setOldImageUrl(existingPattern?.image);
 
       const fileData = new FormData();
       fileData.append("image", file);
 
-      const fileUrl = await fileUploadService.uploadPatternImage(fileData);
+      const fileUrl = await uploadPatternImage(fileData);
 
       if (fileUrl) {
         if (fileUrl && typeof fileUrl === "object" && fileUrl.url) {
@@ -115,19 +108,8 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   };
 
   const handleFileDelete = () => {
-    const oldId = getOldImageId(img);
-    setOldImageId(oldId);
+    setOldImageUrl(existingPattern?.image);
     setImg("");
-  };
-
-  const getOldImageId = (imageURL: string) => {
-    if (!imageURL) {
-      return "";
-    }
-    const oldPath = extractPublicId(imageURL);
-
-    const segments = oldPath.split("/");
-    return segments[segments.length - 1];
   };
 
   const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -179,14 +161,8 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     try {
       let patternResponse;
       if (patternId) {
-        if (oldImageId) {
-          // Delete old image from cloudinary storage
-          await axios.delete(
-            `${API_URL}/api/delete/image/pattern/${oldImageId}/${patternId}`,
-            {
-              withCredentials: true,
-            }
-          );
+        if (oldImageUrl) {
+          await deletePatternImage(oldImageUrl);
         }
         // Update pattern
         patternResponse = await axios.put(

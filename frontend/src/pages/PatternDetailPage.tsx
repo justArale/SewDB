@@ -4,10 +4,9 @@ import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
-import { extractPublicId } from "cloudinary-build-url";
+import { deletePatternImage } from "../service/image.service";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
 interface Pattern {
   name: string;
   image: string;
@@ -41,31 +40,13 @@ const PatternDetailPage: React.FC = () => {
     fetchPatternData();
   }, [patternId]);
 
-  const getImageId = (imageURL: string): string => {
-    if (!imageURL) return "";
-    try {
-      const oldPath = extractPublicId(imageURL);
-      const segments = oldPath ? oldPath.split("/") : [];
-      return segments.length > 0 ? segments[segments.length - 1] : "";
-    } catch (error) {
-      console.error("Error extracting image ID:", error);
-      return "";
-    }
-  };
-
   const deletePattern = async () => {
     try {
       if (currentPattern?.image) {
-        const imageId = getImageId(currentPattern.image); // Hier die imageId setzen
-        console.log("Deleting image with ID:", imageId);
-
-        await axios.delete(
-          `${API_URL}/api/delete/image/pattern/${imageId}/${patternId}`,
-          { withCredentials: true }
-        );
+        await deletePatternImage(currentPattern.image);
       }
 
-      // Lösche das Pattern
+      // Delete the Pattern
       await axios.delete(`${API_URL}/api/patterns/${patternId}`, {
         withCredentials: true,
       });
