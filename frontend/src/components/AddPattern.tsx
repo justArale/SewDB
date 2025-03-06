@@ -182,10 +182,6 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     updateField[field]?.();
   };
 
-  const jumpToTop = () => {
-    window.scrollTo(0, 0);
-  };
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -294,7 +290,6 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
           <Link to={`/patterns/${patternId}`}>
             <button
               type="button"
-              onClick={jumpToTop}
               className="buttonFont noUnderline primaryColor"
             >
               <div className="buttonContentWrapper">
