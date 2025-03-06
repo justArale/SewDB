@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { extractPublicId } from "cloudinary-build-url";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -23,6 +24,8 @@ const PatternDetailPage: React.FC = () => {
   const user = authContext?.user;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   const fetchPatternData = async () => {
     try {
       const response = await axios.get(`${API_URL}/api/patterns/${patternId}`, {
@@ -38,16 +41,38 @@ const PatternDetailPage: React.FC = () => {
     fetchPatternData();
   }, [patternId]);
 
-  const navigate = useNavigate();
+  const getImageId = (imageURL: string): string => {
+    if (!imageURL) return "";
+    try {
+      const oldPath = extractPublicId(imageURL);
+      const segments = oldPath ? oldPath.split("/") : [];
+      return segments.length > 0 ? segments[segments.length - 1] : "";
+    } catch (error) {
+      console.error("Error extracting image ID:", error);
+      return "";
+    }
+  };
 
   const deletePattern = async () => {
     try {
+      if (currentPattern?.image) {
+        const imageId = getImageId(currentPattern.image); // Hier die imageId setzen
+        console.log("Deleting image with ID:", imageId);
+
+        await axios.delete(
+          `${API_URL}/api/delete/image/pattern/${imageId}/${patternId}`,
+          { withCredentials: true }
+        );
+      }
+
+      // Lösche das Pattern
       await axios.delete(`${API_URL}/api/patterns/${patternId}`, {
         withCredentials: true,
       });
+
       navigate(`/`);
     } catch (error) {
-      console.error("Error deleting recipe:", error);
+      console.error("Error deleting pattern:", error);
     }
   };
 
