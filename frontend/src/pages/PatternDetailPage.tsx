@@ -50,11 +50,6 @@ const PatternDetailPage: React.FC = () => {
     setIsDeleteModalOpen(false);
   };
 
-  useEffect(() => {
-    // Jump to the top
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div>
       {currentPattern && (

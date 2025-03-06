@@ -1,5 +1,5 @@
-import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
@@ -12,6 +12,11 @@ import PatternDetailPage from "./pages/PatternDetailPage";
 function App() {
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const handleLoginClick = () => {
     setIsLogin(true);
