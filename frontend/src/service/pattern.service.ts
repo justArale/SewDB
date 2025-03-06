@@ -26,6 +26,24 @@ export const getAllPatterns = async (): Promise<Pattern[]> => {
   }
 };
 
+export const getOnePattern = async (patternId: string): Promise<Pattern> => {
+  try {
+    const response = await API.get(`api/patterns/${patternId}`);
+    return response.data.patterns;
+  } catch (error) {
+    console.error("Error fetching the pattern: ", error);
+    return {
+      id: "",
+      name: "",
+      image: "",
+      sizes: [],
+      category: [],
+      source: [],
+      intendedFor: "",
+    };
+  }
+};
+
 export const createNewPattern = async (patternData: Pattern): Promise<void> => {
   try {
     await API.post(`api/patterns`, patternData);
@@ -42,8 +60,18 @@ export const updatePattern = async (patternData: Pattern): Promise<void> => {
   }
 };
 
+export const deletePattern = async (patternId: string): Promise<void> => {
+  try {
+    await API.delete(`api/patterns/${patternId}`);
+  } catch (error) {
+    console.error("Error deleting the patter: ", error);
+  }
+};
+
 export default {
   getAllPatterns,
+  getOnePattern,
   createNewPattern,
   updatePattern,
+  deletePattern,
 };

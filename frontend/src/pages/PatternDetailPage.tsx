@@ -1,20 +1,14 @@
 // PatternDetailPage.tsx
 import React from "react";
-import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { deletePatternImage } from "../service/image.service";
-
-const API_URL = import.meta.env.VITE_API_URL;
-interface Pattern {
-  name: string;
-  image: string;
-  intendedFor: string;
-  sizes: [];
-  category: [];
-  source: [];
-}
+import {
+  Pattern,
+  getOnePattern,
+  deletePattern,
+} from "../service/pattern.service";
 
 const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
@@ -25,31 +19,22 @@ const PatternDetailPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const fetchPatternData = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/api/patterns/${patternId}`, {
-        withCredentials: true,
-      });
-      setCurrentPattern(response.data.patterns);
-    } catch (error) {
-      console.error("Error fetching the pattern data: ", error);
-    }
-  };
-
   useEffect(() => {
-    fetchPatternData();
+    if (patternId) {
+      getOnePattern(patternId).then((patterns) => {
+        setCurrentPattern(patterns);
+      });
+    }
   }, [patternId]);
 
-  const deletePattern = async () => {
+  const handleDeletePattern = async () => {
     try {
       if (currentPattern?.image) {
         await deletePatternImage(currentPattern.image);
       }
 
       // Delete the Pattern
-      await axios.delete(`${API_URL}/api/patterns/${patternId}`, {
-        withCredentials: true,
-      });
+      await deletePattern(patternId || "");
 
       navigate(`/`);
     } catch (error) {
@@ -102,7 +87,7 @@ const PatternDetailPage: React.FC = () => {
               <p className="mainFont">Are you sure to delete your pattern?</p>
               <button
                 className="button buttonAware primaryColor"
-                onClick={() => deletePattern()}
+                onClick={() => handleDeletePattern()}
               >
                 <div className="buttonContentWrapper">
                   <div className="iconWrapper"></div>
