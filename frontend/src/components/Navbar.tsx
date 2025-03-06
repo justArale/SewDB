@@ -6,6 +6,7 @@ import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import { Add } from "@just1arale/icons";
+import { User } from "../service/user.service";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,11 +16,6 @@ interface NavProps {
   handleCloseOverlay: () => void;
   isLogin: boolean;
   setIsLogin: Dispatch<SetStateAction<boolean>>;
-}
-
-interface User {
-  id: string;
-  isAdmin: boolean;
 }
 
 const Navbar: React.FC<NavProps> = ({
@@ -33,7 +29,7 @@ const Navbar: React.FC<NavProps> = ({
   const authContext = useContext(AuthContext);
   const isLoggedIn = authContext?.isLoggedIn ?? false;
   const user: User | null = authContext?.user ?? null;
-  const logOutUser = authContext?.logOutUser ?? (() => {});
+  const logoutClick = authContext?.logoutClick;
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -42,6 +38,11 @@ const Navbar: React.FC<NavProps> = ({
     } else {
       handleLoginClick();
     }
+  };
+
+  const handleLogout = () => {
+    logoutClick && logoutClick();
+    navigate("/");
   };
 
   return (
@@ -122,7 +123,7 @@ const Navbar: React.FC<NavProps> = ({
             {isLoggedIn ? (
               <div>
                 <button
-                  onClick={logOutUser}
+                  onClick={handleLogout}
                   className="mainFont noUnderline primaryColor"
                 >
                   <span className="buttonFont">Log Out</span>

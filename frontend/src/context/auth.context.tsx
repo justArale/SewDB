@@ -1,24 +1,10 @@
 import React, { useState, useEffect, ReactNode } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
-const API_URL = import.meta.env.VITE_API_URL;
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  isAdmin: boolean;
-}
-
-interface AuthContextType {
-  isLoggedIn: boolean;
-  isLoading: boolean;
-  user: User | null;
-  authenticateUser: () => void;
-  logOutUser: () => void;
-  authError: string | null;
-}
+import {
+  User,
+  AuthContextType,
+  authenticateUser,
+  logoutUser,
+} from "../service/user.service";
 
 const AuthContext = React.createContext<AuthContextType | null>(null);
 
@@ -27,39 +13,33 @@ const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
-  const navigate = useNavigate();
-
-  const authenticateUser = () => {
-    axios
-      .get(`${API_URL}/auth/verify`, { withCredentials: true })
-      .then((response) => {
-        const user = response.data;
-        setIsLoggedIn(true);
-        setIsLoading(false);
-        setUser(user);
-      })
-      .catch((error) => {
-        setAuthError(error.response?.data?.message || "An error occurred");
-        setIsLoggedIn(false);
-        setIsLoading(false);
-        setUser(null);
-      });
-  };
-
-  const logOutUser = async () => {
-    try {
-      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
-      setIsLoggedIn(false);
-      setUser(null);
-      navigate("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
 
   useEffect(() => {
-    authenticateUser();
+    authenticateUser()
+      .then((user) => {
+        if (user) {
+          setIsLoggedIn(true);
+          setUser(user);
+        } else {
+          setIsLoggedIn(false);
+          setUser(null);
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setAuthError(error?.message || "An error occurred");
+        setIsLoggedIn(false);
+        setUser(null);
+        setIsLoading(false);
+      });
   }, []);
+
+  const logoutClick = () => {
+    logoutUser().then(() => {
+      setIsLoggedIn(false);
+      setUser(null);
+    });
+  };
 
   return (
     <AuthContext.Provider
@@ -68,8 +48,8 @@ const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
         isLoading,
         user,
         authenticateUser,
-        logOutUser,
         authError,
+        logoutClick,
       }}
     >
       {children}
