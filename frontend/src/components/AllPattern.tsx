@@ -12,8 +12,6 @@ const AllPattern: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      console.log("getAllPatterns called inside of isLoggedIn");
-
       getAllPatterns().then((patterns) => {
         setAllPatterns(patterns);
       });
