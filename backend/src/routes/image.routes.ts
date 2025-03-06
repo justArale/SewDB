@@ -79,7 +79,7 @@ imageRouter.post("/upload/image/:folder", async (c) => {
 });
 
 // Delete-Handler
-imageRouter.delete("/delete/image/:folder/:imageId/:id", async (c) => {
+imageRouter.delete("/delete/image/:folder/:imageId", async (c) => {
   try {
     const sql = neon(c.env.DATABASE_URL);
     const db = drizzle(sql);
@@ -120,11 +120,6 @@ imageRouter.delete("/delete/image/:folder/:imageId/:id", async (c) => {
     if (deleteResponse.result === "not found") {
       return c.json({ message: "Image not found or already deleted" }, 404);
     }
-
-    const updatePattern = await db
-      .update(patterns)
-      .set({ image: "", updatedAt: new Date() })
-      .where(eq(patterns.id, id));
 
     return c.json({
       message: "Image deleted successfully",
