@@ -7,12 +7,12 @@ const API = axios.create({
 });
 
 export interface Pattern {
-  id: string;
+  id?: string;
   name: string;
-  image: string;
-  sizes: [];
-  category: [];
-  source: [];
+  image?: string;
+  sizes: string[];
+  category: string[];
+  source: string[];
   intendedFor: string;
 }
 
@@ -26,6 +26,24 @@ export const getAllPatterns = async (): Promise<Pattern[]> => {
   }
 };
 
+export const createNewPattern = async (patternData: Pattern): Promise<void> => {
+  try {
+    await API.post(`api/patterns`, patternData);
+  } catch (error) {
+    console.error("Error creating the pattern: ", error);
+  }
+};
+
+export const updatePattern = async (patternData: Pattern): Promise<void> => {
+  try {
+    await API.put(`api/patterns/${patternData.id}`, patternData);
+  } catch (error) {
+    console.error("Error updating the pattern: ", error);
+  }
+};
+
 export default {
   getAllPatterns,
+  createNewPattern,
+  updatePattern,
 };

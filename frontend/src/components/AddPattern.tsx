@@ -1,4 +1,4 @@
-// AddPattern.tsx
+// src/components/AddPattern.tsx
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -6,27 +6,16 @@ import {
   uploadPatternImage,
   deletePatternImage,
 } from "../service/image.service";
-import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL;
-
-interface Pattern {
-  name: string;
-  intendedFor: string;
-  image: string;
-  category: string[];
-  sizes: string[];
-  source: string[];
-}
+import {
+  Pattern,
+  createNewPattern,
+  updatePattern,
+} from "../service/pattern.service";
 
 const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   existingPattern,
 }) => {
   const { patternId } = useParams<{ patternId: string }>();
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  // const [errorMessageMain, setErrorMessageMain] = useState<string>("");
-  // const [errorMessageIngredient, setErrorMessageIngredient] = useState<string>("");
-  // const [errorMessageInstruction, setErrorMessageInstruction] = useState<string>("");
   const [oldImageUrl, setOldImageUrl] = useState<string>();
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imageIsLoading, setImageIsLoading] = useState<boolean>(false);
@@ -45,7 +34,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
       setName(existingPattern.name);
       setIntendedFor(existingPattern.intendedFor);
 
-      setImg(existingPattern.image);
+      setImg(existingPattern.image || "");
       setCategory(
         Array.isArray(existingPattern.category) &&
           existingPattern.category.length > 0
@@ -159,26 +148,15 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     };
 
     try {
-      let patternResponse;
       if (patternId) {
         if (oldImageUrl) {
           await deletePatternImage(oldImageUrl);
         }
         // Update pattern
-        patternResponse = await axios.put(
-          `${API_URL}/api/patterns/${patternId}`,
-          patternData,
-          { withCredentials: true }
-        );
+        updatePattern(patternData);
       } else {
         // Create new pattern
-        patternResponse = await axios.post(
-          `${API_URL}/api/patterns`,
-          patternData,
-          {
-            withCredentials: true,
-          }
-        );
+        createNewPattern(patternData);
       }
 
       // Go back to pattern detail or dashboard
@@ -190,11 +168,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
       // Jump to the top
       window.scrollTo(0, 0);
     } catch (error) {
-      const errorDescription =
-        axios.isAxiosError(error) && error.response?.data?.message
-          ? error.response.data.message
-          : "An error occurred";
-      setErrorMessage(errorDescription);
+      console.error("Error with submitting the pattern: ", error);
     }
   };
 
