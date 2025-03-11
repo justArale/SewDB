@@ -7,7 +7,7 @@ const API = axios.create({
 });
 
 export interface User {
-  id: string;
+  id?: string;
   email: string;
   password: string;
   name: string;
@@ -24,8 +24,8 @@ export interface AuthContextType {
 }
 
 export interface UserToPattern {
-  userId: number;
-  patternId: number;
+  userId: string;
+  patternId: string;
 }
 
 export const authenticateUser = async (): Promise<User | null> => {
@@ -58,9 +58,27 @@ export const getAllUsers = async () => {
   }
 };
 
+export const getSingleUser = async (userId: string): Promise<User | null> => {
+  try {
+    const response = await API.get(`/api/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const deleteUser = async (userId: string): Promise<void> => {
+  try {
+    await API.delete(`/api/users/${userId}`);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const likeUnlikePattern = async (
-  patternId: number,
-  userId: number
+  patternId: string,
+  userId: string
 ): Promise<UserToPattern | null> => {
   try {
     const response = await API.post(`/api/likes/${patternId}/${userId}`);
@@ -72,10 +90,10 @@ export const likeUnlikePattern = async (
 };
 
 export const getUserLikedPattern = async (
-  userId: number
+  userId: string
 ): Promise<UserToPattern | null> => {
   try {
-    const response = await API.get(`api/likes/${userId}/patterns`);
+    const response = await API.get(`/api/likes/${userId}/patterns`);
     return response.data;
   } catch (error) {
     console.error("Error with getting all user liked patterns: ", error);
@@ -84,10 +102,10 @@ export const getUserLikedPattern = async (
 };
 
 export const getPatternLikes = async (
-  patternId: number
+  patternId: string
 ): Promise<UserToPattern | null> => {
   try {
-    const response = await API.get(`api/likes/${patternId}/users`);
+    const response = await API.get(`/api/likes/${patternId}/users`);
     return response.data;
   } catch (error) {
     console.error("Error with getting all likes of this pattern: ", error);
@@ -99,6 +117,8 @@ export default {
   authenticateUser,
   logoutUser,
   getAllUsers,
+  getSingleUser,
+  deleteUser,
   likeUnlikePattern,
   getUserLikedPattern,
   getPatternLikes,
