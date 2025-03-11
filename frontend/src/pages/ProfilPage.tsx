@@ -21,8 +21,9 @@ const ProfilPage: React.FC = () => {
   const user = authContext?.user;
   const { userId } = useParams();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentUserLikedPatterns, setCurrentUserLikedPatterns] =
-    useState<UserToPattern | null>(null);
+  const [currentUserLikedPatterns, setCurrentUserLikedPatterns] = useState<
+    UserToPattern[] | []
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -34,12 +35,10 @@ const ProfilPage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const userData = await getSingleUser(userId);
-        console.log("userData: ", userData);
         setCurrentUser(userData);
 
         const userLikedPatterns = await getUserLikedPattern(userId);
-        console.log("userLikedPattern: ", userLikedPatterns);
-        setCurrentUserLikedPatterns(userLikedPatterns);
+        setCurrentUserLikedPatterns(userLikedPatterns || []);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {

@@ -2,7 +2,7 @@ import React from "react";
 import { UserToPattern } from "../service/user.service";
 
 interface currentUserLikedPatterns {
-  likedPatterns: UserToPattern;
+  likedPatterns: UserToPattern[];
 }
 
 const UserLikedPattern: React.FC<currentUserLikedPatterns> = ({
@@ -10,9 +10,17 @@ const UserLikedPattern: React.FC<currentUserLikedPatterns> = ({
 }) => {
   return (
     <div>
-      {likedPatterns?.map((pattern) => {
-        <li key={pattern.id}>{pattern.name}</li>;
-      })}
+      {likedPatterns.length > 0 ? (
+        <ul>
+          {likedPatterns.map((pattern) => (
+            <li key={pattern.id}>{pattern.name}</li>
+          ))}
+        </ul>
+      ) : (
+        <div>
+          <p>No patterns found</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -26,6 +26,9 @@ export interface AuthContextType {
 export interface UserToPattern {
   userId: string;
   patternId: string;
+  name: string;
+  id: string;
+  image: string;
 }
 
 export const authenticateUser = async (): Promise<User | null> => {
@@ -49,8 +52,6 @@ export const logoutUser = async () => {
 export const getAllUsers = async () => {
   try {
     const response = await API.get(`/api/users`);
-    console.log("all users response", response);
-    console.log("all users response.data", response.data.users);
     return response.data.users;
   } catch (error) {
     console.error("Error getting all users: ", error);
@@ -61,7 +62,7 @@ export const getAllUsers = async () => {
 export const getSingleUser = async (userId: string): Promise<User | null> => {
   try {
     const response = await API.get(`/api/users/${userId}`);
-    return response.data;
+    return response.data.user;
   } catch (error) {
     console.error(error);
     return null;
@@ -91,25 +92,31 @@ export const likeUnlikePattern = async (
 
 export const getUserLikedPattern = async (
   userId: string
-): Promise<UserToPattern | null> => {
+): Promise<UserToPattern[] | []> => {
   try {
     const response = await API.get(`/api/likes/${userId}/patterns`);
+    if (response.data.message) {
+      return [];
+    }
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error with getting all user liked patterns: ", error);
-    return null;
+    return [];
   }
 };
 
 export const getPatternLikes = async (
   patternId: string
-): Promise<UserToPattern | null> => {
+): Promise<UserToPattern | []> => {
   try {
     const response = await API.get(`/api/likes/${patternId}/users`);
+    if (response.data.message) {
+      return [];
+    }
     return response.data;
   } catch (error) {
     console.error("Error with getting all likes of this pattern: ", error);
-    return null;
+    return [];
   }
 };
 
