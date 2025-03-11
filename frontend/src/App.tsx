@@ -9,6 +9,7 @@ import NewPatternPage from "./pages/NewPatternPage";
 import EditPatternPage from "./pages/EditPatternPage";
 import PatternDetailPage from "./pages/PatternDetailPage";
 import AllUsersPage from "./pages/AllUsersPage";
+import ProfilPage from "./pages/ProfilPage";
 
 function App() {
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
@@ -41,6 +42,7 @@ function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/users" element={<AllUsersPage />} />
+          <Route path="users/:userId" element={<ProfilPage />} />
           <Route path="/patterns/:patternId" element={<PatternDetailPage />} />
           <Route path="/patterns/new" element={<NewPatternPage />} />
           <Route
