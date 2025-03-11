@@ -58,8 +58,48 @@ export const getAllUsers = async () => {
   }
 };
 
+export const likeUnlikePattern = async (
+  patternId: number,
+  userId: number
+): Promise<UserToPattern | null> => {
+  try {
+    const response = await API.post(`/api/likes/${patternId}/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error with liking/unliking pattern: ", error);
+    return null;
+  }
+};
+
+export const getUserLikedPattern = async (
+  userId: number
+): Promise<UserToPattern | null> => {
+  try {
+    const response = await API.get(`api/likes/${userId}/patterns`);
+    return response.data;
+  } catch (error) {
+    console.error("Error with getting all user liked patterns: ", error);
+    return null;
+  }
+};
+
+export const getPatternLikes = async (
+  patternId: number
+): Promise<UserToPattern | null> => {
+  try {
+    const response = await API.get(`api/likes/${patternId}/users`);
+    return response.data;
+  } catch (error) {
+    console.error("Error with getting all likes of this pattern: ", error);
+    return null;
+  }
+};
+
 export default {
   authenticateUser,
   logoutUser,
   getAllUsers,
+  likeUnlikePattern,
+  getUserLikedPattern,
+  getPatternLikes,
 };
