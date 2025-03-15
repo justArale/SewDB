@@ -31,13 +31,12 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const patterns = pgTable("patterns", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  image: text("image"),
+  image: jsonb("image").default([]),
   intendedFor: text("intended_for").notNull(),
   category: jsonb("category").notNull(),
   sizes: jsonb("sizes").notNull(),
   source: jsonb("source"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const patternRelations = relations(patterns, ({ many }) => ({
