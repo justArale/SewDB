@@ -38,7 +38,6 @@ const AboutPage: React.FC = () => {
         </button>
         <button className=" noUnderline socialButton linkedIn">
           <a target="_blank" href="https://portfolio.arale.space">
-            {/* <LinkedIn width="32" height="32" color="#000" /> */}
             <img src={aralememoji} width="32" height="32" />
           </a>
         </button>
