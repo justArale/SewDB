@@ -1,0 +1,21 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="1" width="46" height="46" fill="#FAF8F5"/>
+<rect x="1" y="1" width="46" height="46" fill="url(#paint0_linear_2443_25281)"/>
+<rect x="1" y="1" width="46" height="46" stroke="black" stroke-width="2"/>
+<path d="M26.5 41V33.5H41.5V41H26.5Z" stroke="black" stroke-width="2" stroke-linejoin="round"/>
+<path d="M16.5 5.5L9 8C9.5 9.5 10.3 13.2 9.5 16C8.7 18.8 6.5 21.5 5.5 22.5C6.16667 25 7.5 30.7 7.5 33.5C7.5 36.3 6.16667 40 5.5 41.5H22.5V11.5C22 11.3333 20.6 10.7 19 9.5C17.1732 8.12992 16.6667 6.33333 16.5 5.5Z" stroke="black" stroke-width="2" stroke-linejoin="round"/>
+<path d="M28.5 28.5L26 10.5C26 10.5 26.9 10.2 28.5 9C30.1 7.8 30.5 6 33.5 6C36.5 6 37 7.5 38.5 9C39.7 10.2 41 11 41 11L38.5 28.5H28.5Z" stroke="black" stroke-width="2" stroke-linejoin="round"/>
+<line x1="21.5" y1="24.5" x2="6.5" y2="24.5" stroke="black" stroke-linecap="round" stroke-dasharray="2 2"/>
+<line x1="8.5" y1="33.5" x2="21.5" y2="33.5" stroke="black" stroke-linecap="round" stroke-dasharray="2 2"/>
+<line x1="14.5" y1="7.5" x2="14.5" y2="40.5" stroke="black" stroke-linecap="round" stroke-dasharray="2 2"/>
+<line x1="27.5" y1="12.5" x2="39.5" y2="12.5" stroke="black" stroke-linecap="round" stroke-dasharray="2 2"/>
+<line x1="33.5" y1="7.5" x2="33.5" y2="27.5" stroke="black" stroke-linecap="round" stroke-dasharray="2 2"/>
+<line x1="27.5" y1="37.5" x2="40.5" y2="37.5" stroke="black" stroke-linecap="round" stroke-dasharray="2 2"/>
+<line x1="34.5" y1="34.5" x2="34.5" y2="40.5" stroke="black" stroke-linecap="round" stroke-dasharray="2 2"/>
+<defs>
+<linearGradient id="paint0_linear_2443_25281" x1="24" y1="48" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FAF8F3" stop-opacity="0.5"/>
+<stop offset="0.999787" stop-color="#EEE6D9" stop-opacity="0.2"/>
+</linearGradient>
+</defs>
+</svg>
