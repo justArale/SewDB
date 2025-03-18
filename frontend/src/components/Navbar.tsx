@@ -82,14 +82,12 @@ const Navbar: React.FC<NavProps> = ({
             {user?.isAdmin && (
               <div>
                 <button
-                  className="mainFont noUnderline primaryColor buttonReverse"
+                  className="bodyfont buttonDefault"
                   onClick={handleButtonClick}
                 >
-                  <div className="buttonContentWrapper">
+                  <div className="bodyfont buttonDefault">
                     <Add width="16" height="16" color="#FFF" />
-                    <span className="buttonFont buttonFontReverse">
-                      Pattern
-                    </span>
+                    <span className="">Pattern</span>
                   </div>
                 </button>
                 <Link to={`/users`}>
@@ -121,9 +119,9 @@ const Navbar: React.FC<NavProps> = ({
                   location.pathname !== "/signup" && (
                     <button
                       onClick={handleLoginClick}
-                      className="mainFont noUnderline primaryColor"
+                      className="buttonDefault"
                     >
-                      <span className="buttonFont">Log In</span>
+                      <span className="labelfont">Log In</span>
                     </button>
                   )}
               </>

@@ -1,13 +1,13 @@
 import React from "react";
 import { GitHub, LinkedIn } from "@just1arale/icons";
-import "../components/AboutPage.css";
+// import "../components/AboutPage.css";
 import aralememoji from "../assets/image/aralememoji.svg";
 
 const AboutPage: React.FC = () => {
   return (
     <div className="aboutPage">
       <div className="about-content">
-        <h3>Hey there, I'm Arale – welcome to SewDB! 🧵✨</h3>
+        <h3>Hey there, I'm Arale – welcome to SewDB! ✨</h3>
         <p className="mainFont">
           This little corner of the internet is where I collect all my sewing
           patterns. Think of it as my personal sewing database, where patterns

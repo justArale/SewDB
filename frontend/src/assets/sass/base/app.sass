@@ -3,3 +3,34 @@
 body
   background: $background-color, $background-gradient
   font-family: $font-family-main
+  font-weight: $font-weight-normal
+  line-height: 1.5em
+  margin: 0
+
+.pagetitle
+    font-size: $font-size-xlarge
+    line-height: 1.25em
+
+.bodyfontLarge
+    font-size: $font-size-large
+
+.bodyfont
+    font-size: $font-size-small
+    font-weight: $font-weight-normal
+    font-family: $font-family-secondary
+
+.labelfont
+    @extend .bodyfont
+    font-weight: $font-weight-semiBold
+
+.buttonfont
+    @extend .bodyfont
+    font-weight: $font-weight-bold
+
+.metafont
+    font-family: $font-family-secondary
+    font-size: $font-size-xsmall
+    line-height: 2em
+
+.noUnderline
+  text-decoration: none

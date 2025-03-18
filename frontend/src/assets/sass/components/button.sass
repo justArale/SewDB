@@ -1,0 +1,23 @@
+@use "../base/variables" as *
+
+.buttonDefault
+    background-color: $color-default
+    padding: 8px 16px
+    border-radius: 50px
+    border: 2px solid $color-action
+    box-sizing: border-box
+    // height: 40px
+    cursor: pointer
+
+.buttonAction
+    @extend .buttonDefault
+    background-color: $color-action
+    color: $color-white
+
+.buttonAware
+    @extend .buttonAction
+    background-color: $color-aware
+       
+.buttonSave
+    @extend .buttonDefault
+    background-color: $color-save

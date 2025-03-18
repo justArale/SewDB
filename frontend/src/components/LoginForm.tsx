@@ -63,10 +63,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
             />
           </div>
 
-          <button
-            type="submit"
-            className="buttonFont primaryColor becomePrivateButton"
-          >
+          <button type="submit" className="bodyFont buttonSave">
             Log In
           </button>
         </form>
