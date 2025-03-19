@@ -1,4 +1,3 @@
-import "./Navbar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useContext, Dispatch, SetStateAction } from "react";
 import { AuthContext } from "../context/auth.context";
@@ -50,49 +49,47 @@ const Navbar: React.FC<NavProps> = ({
             <img src={logo} alt="logo" className="logoImage" />
           </div>
           <Link to={`/`} className="noUnderline">
-            <h1 className="headline normalLineHeight boldWeight primaryColor">
+            <h1 className="pagetitle primaryFontColor normalLineheight">
               SewDB
             </h1>
-            <p className="mainFont semiBoldWeight thirdColor">
-              All my patterns
-            </p>
+            <p className="labelfont secondaryFontColor">All my patterns</p>
           </Link>
         </div>
         <div className="navigation">
           {isLoggedIn && (
-            <div className="sidebar-path">
+            <div className="">
               <Link
-                className="primaryColor noUnderline"
+                className="primaryFontColor noUnderline"
                 to={`/user/${user?.id}`}
               >
                 <p
-                  className={`mainFont semiBoldWeight thirdColor profil ${
+                  className={`bodyfont secondaryFontColor profile ${
                     location.pathname === `/user/${user?.id}` ||
                     location.pathname === `/user/${user?.id}/edit`
                       ? "active"
                       : ""
                   }`}
                 >
-                  Profil
+                  My Profile
                 </p>
               </Link>
             </div>
           )}
-          <div className="action">
+          <div className="">
             {user?.isAdmin && (
               <div>
                 <button
                   className="bodyfont buttonDefault"
                   onClick={handleButtonClick}
                 >
-                  <div className="bodyfont buttonDefault">
+                  <div className="">
                     <Add width="16" height="16" color="#FFF" />
                     <span className="">Pattern</span>
                   </div>
                 </button>
                 <Link to={`/users`}>
                   <p
-                    className={`mainFont semiBoldWeight thirdColor profil ${
+                    className={`bodyfont secondaryFontColor ${
                       location.pathname === `/user/${user?.id}` ||
                       location.pathname === `/user/${user?.id}/edit`
                         ? "active"
@@ -106,21 +103,15 @@ const Navbar: React.FC<NavProps> = ({
             )}
             {isLoggedIn ? (
               <div>
-                <button
-                  onClick={handleLogout}
-                  className="mainFont noUnderline primaryColor"
-                >
-                  <span className="buttonFont">Log Out</span>
+                <button onClick={handleLogout} className="buttonDefault">
+                  <span className="labelfont">Log Out</span>
                 </button>
               </div>
             ) : (
               <>
                 {location.pathname !== "/login" &&
                   location.pathname !== "/signup" && (
-                    <button
-                      onClick={handleLoginClick}
-                      className="buttonDefault"
-                    >
+                    <button onClick={handleLoginClick} className="buttonAction">
                       <span className="labelfont">Log In</span>
                     </button>
                   )}

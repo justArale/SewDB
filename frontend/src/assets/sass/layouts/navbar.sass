@@ -1,10 +1,10 @@
+@use "../base/variables" as *
+
 .header 
   width: 100%
   margin: 0
-  padding: 64px 0 32px
   display: flex
   justify-content: center
-  box-sizing: border-box
 
 .inner 
   width: 100%
@@ -32,12 +32,16 @@
   gap: 24px
   align-items: center
 
+.profile.active
+  font-weight: $font-weight-bold
+  color: $color-black
+
 @media (max-width: 1024px) 
   .inner 
-    flex-direction: column
-    align-items: flex-start
+    align-items: center
     height: auto
     gap: 16px
+    padding: 0
   
   .navigation 
     gap: 16px
