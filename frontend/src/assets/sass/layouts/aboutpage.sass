@@ -1,0 +1,48 @@
+@use "../base/variables" as *
+
+.aboutPage
+    width: 100%
+    display: flex
+    gap: 16px
+    align-items: center
+    padding: 0 12px
+    box-sizing: border-box
+
+
+.about-content
+    width: auto
+    max-width: calc(100% - 174px - 16px) // 100% - Social Buttons - Gap
+    height: auto
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    gap: 16px
+    padding: 32px
+    box-sizing: border-box
+    border-radius: 20px
+    background-color: $second-background-color
+
+.social-buttons
+    width: 174px
+    padding: 12px 0
+    display: flex
+    flex-direction: column
+    gap: 16px
+    box-sizing: border-box
+
+
+.socialButton
+    border-radius: 16px
+    padding: 32px
+    box-sizing: border-box
+    border: none
+
+.github
+    background-color: $color-highlight
+   
+
+.linkedIn
+    background-color: $color-save
+
+.memoji
+    background-color: $color-memoji
