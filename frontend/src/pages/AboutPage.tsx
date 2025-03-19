@@ -1,6 +1,5 @@
 import React from "react";
 import { GitHub, LinkedIn } from "@just1arale/icons";
-// import "../components/AboutPage.css";
 import aralememoji from "../assets/image/aralememoji.svg";
 
 const AboutPage: React.FC = () => {
