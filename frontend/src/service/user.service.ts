@@ -29,6 +29,7 @@ export interface UserToPattern {
   name: string;
   id: string;
   image: string;
+  sizes: string[];
 }
 
 export const authenticateUser = async (): Promise<User | null> => {

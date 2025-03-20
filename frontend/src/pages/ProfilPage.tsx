@@ -6,7 +6,7 @@ import { AuthContext } from "../context/auth.context";
 import { useContext } from "react";
 import {
   User,
-  UserToPattern,
+  Pattern,
   getSingleUser,
   getUserLikedPattern,
   deleteUser,
@@ -22,7 +22,7 @@ const ProfilPage: React.FC = () => {
   const { userId } = useParams();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentUserLikedPatterns, setCurrentUserLikedPatterns] = useState<
-    UserToPattern[] | []
+    Pattern[] | []
   >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
