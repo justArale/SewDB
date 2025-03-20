@@ -60,12 +60,12 @@ const Navbar: React.FC<NavProps> = ({
             <div className="">
               <Link
                 className="primaryFontColor noUnderline"
-                to={`/user/${user?.id}`}
+                to={`/users/${user?.id}`}
               >
                 <p
                   className={`bodyfont secondaryFontColor profile ${
-                    location.pathname === `/user/${user?.id}` ||
-                    location.pathname === `/user/${user?.id}/edit`
+                    location.pathname === `/users/${user?.id}` ||
+                    location.pathname === `/users/${user?.id}/edit`
                       ? "active"
                       : ""
                   }`}
@@ -90,10 +90,7 @@ const Navbar: React.FC<NavProps> = ({
                 <Link to={`/users`}>
                   <p
                     className={`bodyfont secondaryFontColor ${
-                      location.pathname === `/user/${user?.id}` ||
-                      location.pathname === `/user/${user?.id}/edit`
-                        ? "active"
-                        : ""
+                      location.pathname === `/users/` ? "active" : ""
                     }`}
                   >
                     All users
