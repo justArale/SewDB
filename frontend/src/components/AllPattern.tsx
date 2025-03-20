@@ -20,26 +20,27 @@ const AllPattern: React.FC = () => {
 
   return (
     <div>
+      <h1 className="bodyfontLarge">Patterns</h1>
+
       {allPatterns && (
-        <div className="">
-          <div className=""></div>
-          <div className="">
-            <h1>Patterns</h1>
-            {allPatterns.map((pattern) => (
-              <div key={pattern.id} className="">
-                <Link to={`/patterns/${pattern.id}`}>
-                  <h2>{pattern.name}</h2>
-                  <p>Category: {pattern.category.join(", ")}</p>
-                  <p>Sizes: {pattern.sizes.join(", ")}</p>
-                  <p>Source: {pattern.source.join(", ")}</p>
-                  <p>Intended for: {pattern.intendedFor}</p>
-                  {pattern.image && (
-                    <img src={pattern.image} alt={pattern.name} />
-                  )}
-                </Link>
-              </div>
-            ))}
-          </div>
+        <div className="patternGrid">
+          {allPatterns.map((pattern) => (
+            <div key={pattern.id} className="patternCard">
+              <Link to={`/patterns/${pattern.id}`} className="noUnderline">
+                {pattern.image && (
+                  <img
+                    src={pattern.image}
+                    alt={pattern.name}
+                    className="patternCardImage"
+                  />
+                )}
+                <div className="patternCardContent primaryFontColor">
+                  <h2 className="labelfont">{pattern.name}</h2>
+                  <p className="bodyfont">Sizes: {pattern.sizes.join(", ")}</p>
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       )}
     </div>
