@@ -23,15 +23,6 @@ export interface AuthContextType {
   logoutClick: () => void;
 }
 
-export interface UserToPattern {
-  userId: string;
-  patternId: string;
-  name: string;
-  id: string;
-  image: string;
-  sizes: string[];
-}
-
 export const authenticateUser = async (): Promise<User | null> => {
   try {
     const response = await API.get(`/auth/verify`);
@@ -78,37 +69,9 @@ export const deleteUser = async (userId: string): Promise<void> => {
   }
 };
 
-export const likeUnlikePattern = async (
-  patternId: string,
-  userId: string
-): Promise<UserToPattern | null> => {
-  try {
-    const response = await API.post(`/api/likes/${patternId}/${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error with liking/unliking pattern: ", error);
-    return null;
-  }
-};
-
-export const getUserLikedPattern = async (
-  userId: string
-): Promise<UserToPattern[] | []> => {
-  try {
-    const response = await API.get(`/api/likes/${userId}/patterns`);
-    if (response.data.message) {
-      return [];
-    }
-    return response.data;
-  } catch (error: any) {
-    console.error("Error with getting all user liked patterns: ", error);
-    return [];
-  }
-};
-
 export const getPatternLikes = async (
   patternId: string
-): Promise<UserToPattern | []> => {
+): Promise<User | []> => {
   try {
     const response = await API.get(`/api/likes/${patternId}/users`);
     if (response.data.message) {
@@ -127,7 +90,5 @@ export default {
   getAllUsers,
   getSingleUser,
   deleteUser,
-  likeUnlikePattern,
-  getUserLikedPattern,
   getPatternLikes,
 };

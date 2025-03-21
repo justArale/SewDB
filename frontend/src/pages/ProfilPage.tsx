@@ -6,12 +6,11 @@ import { AuthContext } from "../context/auth.context";
 import { useContext } from "react";
 import {
   User,
-  Pattern,
   getSingleUser,
-  getUserLikedPattern,
   deleteUser,
   logoutUser,
 } from "../service/user.service";
+import { Pattern, getUserLikedPattern } from "../service/pattern.service";
 import { Edit } from "@just1arale/icons";
 import { Delete } from "@just1arale/icons";
 import UserInfoCard from "../components/UserInfoCard";

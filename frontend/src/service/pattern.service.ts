@@ -68,10 +68,40 @@ export const deletePattern = async (patternId: string): Promise<void> => {
   }
 };
 
+export const likeUnlikePattern = async (
+  patternId: string,
+  userId: string
+): Promise<Pattern | null> => {
+  try {
+    const response = await API.post(`/api/likes/${patternId}/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error with liking/unliking pattern: ", error);
+    return null;
+  }
+};
+
+export const getUserLikedPattern = async (
+  userId: string
+): Promise<Pattern[] | []> => {
+  try {
+    const response = await API.get(`/api/likes/${userId}/patterns`);
+    if (response.data.message) {
+      return [];
+    }
+    return response.data;
+  } catch (error: any) {
+    console.error("Error with getting all user liked patterns: ", error);
+    return [];
+  }
+};
+
 export default {
   getAllPatterns,
   getOnePattern,
   createNewPattern,
   updatePattern,
   deletePattern,
+  likeUnlikePattern,
+  getUserLikedPattern,
 };
