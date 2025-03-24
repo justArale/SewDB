@@ -229,34 +229,6 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
                   </div>
                 </button>
               )}
-              {/* <label
-                className={`uploadButton ${img ? "buttonReverseHalf" : ""}`}
-              >
-                <input
-                  type="file"
-                  name="img"
-                  accept="image/png, image/jpg, image/jpeg, image/gif, image/webm, image/webp, image/heic"
-                  onChange={(e) => handleFileUpload(e, index)}
-                />
-                {imageIsLoading ? (
-                  "🔄 loading ..."
-                ) : img[index] ? (
-                  <div className="buttonContentWrapper">
-                    <span className="buttonFont">Change</span>
-                  </div>
-                ) : (
-                  <div
-                    className="buttonContentWrapper"
-                    onClick={
-                      index === images.length - 1
-                        ? () => addNewField("images")
-                        : undefined
-                    }
-                  >
-                    <span className="buttonFont">Choose Image</span>
-                  </div>
-                )}
-              </label> */}
             </div>
           ))}
           {category.map((cat, index) => (
