@@ -30,7 +30,10 @@ const PatternDetailPage: React.FC = () => {
   const handleDeletePattern = async () => {
     try {
       if (currentPattern?.image) {
-        await deletePatternImage(currentPattern.image);
+        // Delete all images of the pattern
+        currentPattern.image.forEach(async (image) => {
+          await deletePatternImage(image);
+        });
       }
 
       // Delete the Pattern
@@ -61,9 +64,12 @@ const PatternDetailPage: React.FC = () => {
             <li>Category: {currentPattern.category.join(", ")}</li>
             <li>Source: {currentPattern.source.join(", ")}</li>
           </ul>
-          {currentPattern.image && (
-            <img src={currentPattern.image} alt={currentPattern.name} />
-          )}
+          {currentPattern.image &&
+            currentPattern.image.map((image, index) => (
+              <div key={index}>
+                <img src={image} alt={currentPattern.name} />
+              </div>
+            ))}
         </div>
       )}
       {user?.isAdmin && (

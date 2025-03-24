@@ -16,7 +16,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   existingPattern,
 }) => {
   const { patternId } = useParams<{ patternId: string }>();
-  const [oldImageUrl, setOldImageUrl] = useState<string>();
+  const [oldImageUrl, setOldImageUrl] = useState<string[] | undefined>([]);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imageIsLoading, setImageIsLoading] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
 
   const [name, setName] = useState<string>("");
   const [intendedFor, setIntendedFor] = useState<string>("");
-  const [img, setImg] = useState<string>("");
+  const [images, setImages] = useState<string[]>([""]);
   const [category, setCategory] = useState<string[]>([""]);
   const [sizes, setSizes] = useState<string[]>([""]);
   const [source, setSource] = useState<string[]>([""]);
@@ -34,7 +34,13 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
       setName(existingPattern.name);
       setIntendedFor(existingPattern.intendedFor);
 
-      setImg(existingPattern.image || "");
+      setImages(
+        Array.isArray(existingPattern.image) && existingPattern.image.length > 0
+          ? existingPattern.image.map((img) => {
+              return img;
+            })
+          : [""]
+      );
       setCategory(
         Array.isArray(existingPattern.category) &&
           existingPattern.category.length > 0
@@ -66,23 +72,20 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   ): Promise<void> => {
     try {
       setImageIsLoading(true);
-
       if (!event.target.files || event.target.files.length === 0) {
         throw new Error("No file selected");
       }
 
       const file = event.target.files[0];
-
-      existingPattern?.image && setOldImageUrl(existingPattern?.image);
-
       const fileData = new FormData();
       fileData.append("image", file);
 
       const fileUrl = await uploadPatternImage(fileData);
 
       if (fileUrl) {
+        console.log("fileUrl.url inside if: ", fileUrl.url);
         if (fileUrl && typeof fileUrl === "object" && fileUrl.url) {
-          setImg(fileUrl.url);
+          setImages((prevImages) => [...prevImages, fileUrl.url]);
         } else {
           throw new Error("File upload failed");
         }
@@ -96,9 +99,10 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     }
   };
 
-  const handleFileDelete = () => {
-    setOldImageUrl(existingPattern?.image);
-    setImg("");
+  const handleFileDelete = (index: number) => {
+    setOldImageUrl((oldImageUrl) => [...(oldImageUrl || []), images[index]]);
+    // Remove the image from the displayed images array
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -137,10 +141,10 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const patternData = {
+      id: patternId,
       name: name,
-      image: img,
+      image: images.filter((img) => img.trim() !== ""),
       intendedFor: intendedFor,
       category: category.filter((cat) => cat.trim() !== ""), // Get rid of empty lines
       sizes: sizes.filter((size) => size.trim() !== ""),
@@ -150,7 +154,9 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     try {
       if (patternId) {
         if (oldImageUrl) {
-          await deletePatternImage(oldImageUrl);
+          oldImageUrl.forEach(async (image) => {
+            await deletePatternImage(image);
+          });
         }
         // Update pattern
         updatePattern(patternData);
@@ -203,33 +209,56 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
           onChange={handleIntendedForInput}
         />
         <div className="">
-          {img && <img src={img} className="" />}
-          {img && !imageIsLoading && (
-            <button type="button" className="" onClick={handleFileDelete}>
-              <div className="buttonContentWrapper">
-                <span className="buttonFont">Remove</span>
-              </div>
-            </button>
-          )}
-          <label className={`uploadButton ${img ? "buttonReverseHalf" : ""}`}>
-            <input
-              type="file"
-              name="img"
-              accept="image/png, image/jpg, image/jpeg, image/gif, image/webm, image/webp, image/heic"
-              onChange={handleFileUpload}
-            />
-            {imageIsLoading ? (
-              "🔄 loading ..."
-            ) : img ? (
-              <div className="buttonContentWrapper">
-                <span className="buttonFont">Change</span>
-              </div>
-            ) : (
-              <div className="buttonContentWrapper">
-                <span className="buttonFont">Choose Image</span>
-              </div>
-            )}
-          </label>
+          <input
+            type="file"
+            name="img"
+            accept="image/png, image/jpg, image/jpeg, image/gif, image/webm, image/webp, image/heic"
+            onChange={handleFileUpload}
+          />
+          {images.map((img, index) => (
+            <div key={index}>
+              {img && <img src={img} className="" />}
+              {img && !imageIsLoading && (
+                <button
+                  type="button"
+                  className=""
+                  onClick={() => handleFileDelete(index)}
+                >
+                  <div className="buttonContentWrapper">
+                    <span className="buttonFont">Remove</span>
+                  </div>
+                </button>
+              )}
+              {/* <label
+                className={`uploadButton ${img ? "buttonReverseHalf" : ""}`}
+              >
+                <input
+                  type="file"
+                  name="img"
+                  accept="image/png, image/jpg, image/jpeg, image/gif, image/webm, image/webp, image/heic"
+                  onChange={(e) => handleFileUpload(e, index)}
+                />
+                {imageIsLoading ? (
+                  "🔄 loading ..."
+                ) : img[index] ? (
+                  <div className="buttonContentWrapper">
+                    <span className="buttonFont">Change</span>
+                  </div>
+                ) : (
+                  <div
+                    className="buttonContentWrapper"
+                    onClick={
+                      index === images.length - 1
+                        ? () => addNewField("images")
+                        : undefined
+                    }
+                  >
+                    <span className="buttonFont">Choose Image</span>
+                  </div>
+                )}
+              </label> */}
+            </div>
+          ))}
           {category.map((cat, index) => (
             <div key={index}>
               <input

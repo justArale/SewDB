@@ -14,7 +14,7 @@ const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
           <Link to={`/patterns/${pattern.id}`} className="noUnderline">
             {pattern.image && (
               <img
-                src={pattern.image}
+                src={pattern.image[0]}
                 alt={pattern.name}
                 className="patternCardImage"
               />

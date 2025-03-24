@@ -9,7 +9,7 @@ const API = axios.create({
 export interface Pattern {
   id?: string;
   name: string;
-  image?: string;
+  image?: string[];
   sizes: string[];
   category: string[];
   source: string[];
@@ -35,7 +35,7 @@ export const getOnePattern = async (patternId: string): Promise<Pattern> => {
     return {
       id: "",
       name: "",
-      image: "",
+      image: [],
       sizes: [],
       category: [],
       source: [],
