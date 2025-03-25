@@ -56,6 +56,33 @@ const Navbar: React.FC<NavProps> = ({
           </Link>
         </div>
         <div className="navigation">
+          {user?.isAdmin && (
+            <div className="navigation">
+              <div className="">
+                <Link to={`/users`} className="primaryFontColor noUnderline">
+                  <p
+                    className={`bodyfont secondaryFontColor profile ${
+                      location.pathname === `/users` ? "active" : ""
+                    }`}
+                  >
+                    All users
+                  </p>
+                </Link>
+              </div>
+
+              <div>
+                <button
+                  className="bodyfont buttonDefault"
+                  onClick={handleButtonClick}
+                >
+                  <div className="innerButtonWrapper">
+                    <Add width="16" height="16" color="#000" />
+                    <span className="">Pattern</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
           {isLoggedIn && (
             <div className="">
               <Link
@@ -76,28 +103,6 @@ const Navbar: React.FC<NavProps> = ({
             </div>
           )}
           <div className="">
-            {user?.isAdmin && (
-              <div>
-                <button
-                  className="bodyfont buttonDefault"
-                  onClick={handleButtonClick}
-                >
-                  <div className="">
-                    <Add width="16" height="16" color="#FFF" />
-                    <span className="">Pattern</span>
-                  </div>
-                </button>
-                <Link to={`/users`}>
-                  <p
-                    className={`bodyfont secondaryFontColor ${
-                      location.pathname === `/users/` ? "active" : ""
-                    }`}
-                  >
-                    All users
-                  </p>
-                </Link>
-              </div>
-            )}
             {isLoggedIn ? (
               <div>
                 <button onClick={handleLogout} className="buttonDefault">
