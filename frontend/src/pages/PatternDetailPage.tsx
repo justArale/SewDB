@@ -16,6 +16,7 @@ const PatternDetailPage: React.FC = () => {
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const navigate = useNavigate();
 
@@ -53,23 +54,97 @@ const PatternDetailPage: React.FC = () => {
     setIsDeleteModalOpen(false);
   };
 
+  // Bildwechsel bei Dot-Klick
+  const handleDotClick = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
+  // Wischbewegung für mobiles Swipen
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX - touchEndX > 50) {
+      // Wischen nach links (nächstes Bild)
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex < (currentPattern?.image?.length || 1) - 1 ? prevIndex + 1 : 0
+      );
+    } else if (touchEndX - touchStartX > 50) {
+      // Wischen nach rechts (vorheriges Bild)
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : (currentPattern?.image?.length || 1) - 1
+      );
+    }
+  };
+
   return (
     <div className="componentBox">
       {currentPattern && (
-        <div>
-          <h3>Current pattern: {currentPattern.name}</h3>
-          <ul>
-            <li>Intended for: {currentPattern.intendedFor}</li>
-            <li>Sizes: {currentPattern.sizes.join(", ")}</li>
-            <li>Category: {currentPattern.category.join(", ")}</li>
-            <li>Source: {currentPattern.source.join(", ")}</li>
+        <div className="patternDetailRow">
+          <div className="imageWrapper">
+            {currentPattern.image &&
+              currentPattern.image.map((image, index) => (
+                <div
+                  key={index}
+                  className={`imageCarousel ${
+                    index === currentImageIndex ? "active" : ""
+                  }`}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  {index === currentImageIndex && (
+                    <img
+                      src={image}
+                      alt={currentPattern.name}
+                      className="patternImage"
+                    />
+                  )}
+                </div>
+              ))}
+            <div className="dotsWrapper">
+              {currentPattern?.image?.map((_, index) => (
+                <span
+                  key={index}
+                  className={`dot ${
+                    index === currentImageIndex ? "active" : ""
+                  }`}
+                  onClick={() => handleDotClick(index)}
+                ></span>
+              ))}
+            </div>
+          </div>
+
+          <ul className="patternContentWrapper">
+            <li>
+              <h5 className="labelfont">Name:</h5>
+              <p className="bodyfont">{currentPattern.name}</p>
+            </li>
+            <li>
+              <h5 className="labelfont">Intended for:</h5>
+              <p className="bodyfont">{currentPattern.intendedFor}</p>
+            </li>
+            <li>
+              <h5 className="labelfont">Category:</h5>
+              <p className="bodyfont">{currentPattern.category.join(", ")}</p>
+            </li>
+            <li>
+              <h5 className="labelfont">Sizes:</h5>
+              <p className="bodyfont">{currentPattern.sizes.join(", ")}</p>
+            </li>
+            <li>
+              <h5 className="labelfont">Source:</h5>
+              <p className="bodyfont">{currentPattern.source.join(", ")}</p>
+            </li>
           </ul>
-          {currentPattern.image &&
-            currentPattern.image.map((image, index) => (
-              <div key={index}>
-                <img src={image} alt={currentPattern.name} />
-              </div>
-            ))}
         </div>
       )}
       {user?.isAdmin && (

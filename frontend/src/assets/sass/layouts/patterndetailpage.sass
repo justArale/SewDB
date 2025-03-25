@@ -1,0 +1,81 @@
+@use "../base/variables" as *
+
+.patternDetailRow
+    display: flex
+    // flex-direction: column
+    gap: 24px
+    width: 100%
+    justify-content: space-between
+    align-items: center
+    box-sizing: border-box
+
+.imageWrapper
+    // aspect-ratio: 3/2
+    width: 510px
+    height: 421px
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    border-radius: 20px
+    overflow: hidden
+    background-color: $second-background-color
+    position: relative
+    box-sizing: border-box
+    flex-grow: 0
+
+.imageCarousel
+    display: none
+    justify-content: center
+    align-items: center
+    width: 100%
+    height: 100%
+    &.active
+        display: flex
+
+.patternImage
+  width: 100%
+  height: 100%
+  object-fit: contain
+
+.dotsWrapper
+  position: absolute
+  bottom: 8px
+  left: 50% 
+  transform: translateX(-50%) 
+  display: flex
+  justify-content: center
+  gap: 8px 
+  z-index: 200
+
+.dot
+    cursor: pointer
+    height: 12px
+    width: 12px
+    background-color: $color-memoji
+    border-radius: 50%
+    border: 1px solid $color-action
+    transition: background-color 0.6s ease
+    z-index: 200
+    display: flex
+
+    &.active
+        background-color: $color-action
+
+.patternContentWrapper
+    flex-grow: 1
+    height: 100%
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    gap: 24px
+    align-items: flex-start
+    border-radius: 20px
+    padding: 24px
+    box-sizing: border-box
+    background-color: $second-background-color
+
+ul
+    list-style-type: none
+    padding: 0
+    margin: 0
