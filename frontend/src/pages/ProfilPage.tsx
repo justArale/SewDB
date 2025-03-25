@@ -67,7 +67,7 @@ const ProfilPage: React.FC = () => {
   };
 
   return (
-    <div className="">
+    <div className="componentBox">
       {currentUser && (
         <div className="">
           <div className="">

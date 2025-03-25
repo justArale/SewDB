@@ -2,7 +2,7 @@ import React from "react";
 
 const ErrorPage: React.FC = () => {
   return (
-    <div className="errorPage">
+    <div className="componentBox">
       <h4 className="pagetitle">Oops, Wrong Turn ...</h4>
       <p className="bodyfont">
         Lost in the pattern maze? This page doesn’t seem to exist, but there are

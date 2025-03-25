@@ -54,7 +54,7 @@ const PatternDetailPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="componentBox">
       {currentPattern && (
         <div>
           <h3>Current pattern: {currentPattern.name}</h3>

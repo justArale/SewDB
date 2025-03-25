@@ -8,7 +8,7 @@ const PatternEditPage: React.FC = () => {
   const patternFromLocation = location.state?.currentPattern;
 
   return (
-    <div>
+    <div className="componentBox">
       <AddPattern existingPattern={patternFromLocation} />
     </div>
   );

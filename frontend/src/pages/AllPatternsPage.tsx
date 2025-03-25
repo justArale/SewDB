@@ -18,7 +18,7 @@ const AllPatternsPage: React.FC = () => {
   }, [isLoggedIn]);
 
   return (
-    <div>
+    <div className="componentBox">
       <p>Place for the searchbar</p>
       {allPatterns && <PatternGrid patterns={allPatterns} />}
     </div>
