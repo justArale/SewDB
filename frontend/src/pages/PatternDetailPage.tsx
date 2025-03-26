@@ -125,24 +125,50 @@ const PatternDetailPage: React.FC = () => {
 
           <ul className="patternContentWrapper">
             <li>
-              <h5 className="labelfont">Name:</h5>
-              <p className="bodyfont">{currentPattern.name}</p>
+              <span></span>
+              <div>
+                <h5 className="labelfont">Name:</h5>
+                <p className="bodyfont patternContent">{currentPattern.name}</p>
+              </div>
             </li>
             <li>
-              <h5 className="labelfont">Intended for:</h5>
-              <p className="bodyfont">{currentPattern.intendedFor}</p>
+              <span></span>
+              <div>
+                <h5 className="labelfont">Intended for:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.intendedFor}
+                </p>
+              </div>
             </li>
             <li>
-              <h5 className="labelfont">Category:</h5>
-              <p className="bodyfont">{currentPattern.category.join(", ")}</p>
+              <span></span>
+
+              <div>
+                <h5 className="labelfont">Category:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.category.join(", ")}
+                </p>
+              </div>
             </li>
             <li>
-              <h5 className="labelfont">Sizes:</h5>
-              <p className="bodyfont">{currentPattern.sizes.join(", ")}</p>
+              <span></span>
+
+              <div>
+                <h5 className="labelfont">Sizes:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.sizes.join(", ")}
+                </p>
+              </div>
             </li>
             <li>
-              <h5 className="labelfont">Source:</h5>
-              <p className="bodyfont">{currentPattern.source.join(", ")}</p>
+              <span></span>
+
+              <div>
+                <h5 className="labelfont">Source:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.source.join(", ")}
+                </p>
+              </div>
             </li>
           </ul>
         </div>

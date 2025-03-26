@@ -11,7 +11,8 @@
 
 .imageWrapper
     // aspect-ratio: 3/2
-    width: 510px
+    width: 100%
+    max-width: 510px
     height: 421px
     display: flex
     flex-direction: column
@@ -79,3 +80,28 @@ ul
     list-style-type: none
     padding: 0
     margin: 0
+
+li
+    width: 100%
+    display: flex
+    gap: 12px
+
+li > span
+    background-color: $color-action
+    border-radius: 1px
+    width: 2px
+    align-self: stretch
+
+li > div
+    flex-grow: 1
+
+.patternContent
+    text-align: right
+
+@media (max-width: 1200px)
+    .patternDetailRow
+        flex-direction: column
+    
+    .patternContentWrapper
+        width: 100%
+        max-width: 510px
