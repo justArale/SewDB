@@ -79,11 +79,11 @@ const ProfilPage: React.FC = () => {
               )}
 
               {user && userId === String(user.id) && (
-                <div className="action">
+                <div className="buttonWrapper">
                   <Link to={`/user/${userId}/edit`} className="">
-                    <button className="">
+                    <button className="buttonAction">
                       {" "}
-                      <div className="">
+                      <div className="innerButtonWrapper">
                         <Edit width="16" height="16" />
 
                         <span className="">Edit</span>
@@ -91,8 +91,8 @@ const ProfilPage: React.FC = () => {
                     </button>
                   </Link>
 
-                  <button className="" onClick={handleDeleteModel}>
-                    <div className="">
+                  <button className="buttonAware" onClick={handleDeleteModel}>
+                    <div className="innerButtonWrapper">
                       <Delete width="16" height="16" />
 
                       <span className="">Delete</span>
@@ -112,16 +112,16 @@ const ProfilPage: React.FC = () => {
         <div className="overlay" onClick={closeModal}>
           <div className="overlay-content">
             <div className="deleteModalContent">
-              <h3 className="headline">Delete Profil</h3>
-              <p className="mainFont">Are you sure to delete your profil?</p>
+              <h3 className="bodyfontLarge">Delete Profil</h3>
+              <p className="bodyfont">Are you sure to delete your profil?</p>
               <button
                 className="button buttonAware primaryColor"
                 onClick={() => handleDeleteUser(userId || "")}
               >
-                <div className="buttonContentWrapper">
+                <div className="innerButtonWrapper">
                   <Delete width="16" height="16" />
 
-                  <span className="buttonFont">Delete</span>
+                  <span className="labelfont">Delete</span>
                 </div>
               </button>
             </div>
