@@ -174,27 +174,27 @@ const PatternDetailPage: React.FC = () => {
         </div>
       )}
       {user?.isAdmin && (
-        <div>
+        <div className="buttonWrapper">
           <Link to={`/patterns/${patternId}/edit`} state={{ currentPattern }}>
-            <button>Edit</button>
+            <button className="buttonAction">Edit</button>
           </Link>
-          <button onClick={handleDeleteModel}>Delete</button>
+          <button onClick={handleDeleteModel} className="buttonAware">
+            Delete
+          </button>
         </div>
       )}
       {isDeleteModalOpen && (
         <div className="overlay" onClick={closeModal}>
           <div className="overlay-content">
             <div className="deleteModalContent">
-              <h3 className="headline">Delete Pattern</h3>
-              <p className="mainFont">Are you sure to delete your pattern?</p>
+              <h3 className="bodyfontLarge">Delete Pattern</h3>
+              <p className="bodyfont">Are you sure to delete your pattern?</p>
               <button
                 className="button buttonAware primaryColor"
                 onClick={() => handleDeletePattern()}
               >
-                <div className="buttonContentWrapper">
-                  <div className="iconWrapper"></div>
-                  <span className="buttonFont">Delete</span>
-                </div>
+                <div className="innerButtonWrapper"></div>
+                <span className="labelfont">Delete</span>
               </button>
             </div>
           </div>
