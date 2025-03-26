@@ -24,6 +24,7 @@ likeRouter.get("/likes/:userId/patterns", async (c) => {
       id: patterns.id,
       name: patterns.name,
       image: patterns.image,
+      sizes: patterns.sizes,
     })
     .from(usersToPatterns)
     .innerJoin(patterns, eq(usersToPatterns.patternId, patterns.id))
