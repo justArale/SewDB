@@ -8,9 +8,10 @@ import {
   Pattern,
   getOnePattern,
   deletePattern,
+  likeUnlikePattern,
 } from "../service/pattern.service";
 import HearUnfill from "../assets/icon/HeartUnfill.svg";
-// import HearFill from "../assets/image/heart-fill.svg";
+import HearFill from "../assets/icon/heartFill.svg";
 
 const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
@@ -19,8 +20,16 @@ const PatternDetailPage: React.FC = () => {
   const user = authContext?.user;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [like, setLike] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const likeUnlike = async (patternId: string, userId: string) => {
+    console.log("likeUnlikePattern is clicked");
+    setLike((prevLike) => !prevLike);
+    console.log(like);
+    likeUnlikePattern(patternId, userId);
+  };
 
   useEffect(() => {
     if (patternId) {
@@ -123,8 +132,21 @@ const PatternDetailPage: React.FC = () => {
                 ></span>
               ))}
             </div>
-            <span className="likeIconWrapper">
-              <img src={HearUnfill} alt="heart" />
+            <span
+              className="likeIconWrapper"
+              onClick={() => {
+                if (currentPattern?.id && user?.id) {
+                  likeUnlike(currentPattern.id, user.id);
+                } else {
+                  console.error("Pattern ID or User ID is undefined");
+                }
+              }}
+            >
+              {like ? (
+                <img src={HearFill} alt="heart" />
+              ) : (
+                <img src={HearUnfill} alt="heart" />
+              )}
             </span>
           </div>
 
