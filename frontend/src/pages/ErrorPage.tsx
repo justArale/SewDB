@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ErrorPage: React.FC = () => {
   return (
@@ -8,7 +9,9 @@ const ErrorPage: React.FC = () => {
         Lost in the pattern maze? This page doesn’t seem to exist, but there are
         plenty of designs waiting for you. Let’s get you back.
       </p>
-      <button className="buttonAction labelfont">Back to Home</button>
+      <Link to="/">
+        <button className="buttonAction labelfont">Back to Home</button>
+      </Link>
     </div>
   );
 };
