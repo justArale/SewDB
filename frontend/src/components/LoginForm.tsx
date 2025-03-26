@@ -1,5 +1,4 @@
 import React from "react";
-import "./LogInForm.css";
 
 interface LoginFormProps {
   handleLoginSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -22,17 +21,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   return (
     <div>
-      <p className="mainFont">
-        <a href="#" onClick={onSwitch} className="noUnderline hiddenSignUp">
-          Sign Up
-        </a>
-      </p>
-      <div className="login">
-        <form onSubmit={handleLoginSubmit} className="signup-form">
-          <h3 className="headline">Log In</h3>
+      <div className="access">
+        <form onSubmit={handleLoginSubmit} className="accessForm">
+          <h3 className="bodyfontLarge">Log In</h3>
 
           <div className="input-group">
-            <label htmlFor="email" className="mainFont">
+            <label htmlFor="email" className="bodyfont secondaryFontColor">
               Email
             </label>
             <input
@@ -43,12 +37,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
               onChange={handleEmail}
               autoComplete="off"
               placeholder="What's your email?"
-              className="signUpInput"
+              className="accessInput"
             />
           </div>
 
           <div className="input-group">
-            <label htmlFor="password" className="mainFont">
+            <label htmlFor="password" className="bodyfont secondaryFontColor">
               Password
             </label>
             <input
@@ -59,19 +53,26 @@ const LoginForm: React.FC<LoginFormProps> = ({
               onChange={handlePassword}
               autoComplete="off"
               placeholder="••••••••••••••••"
-              className="signUpInput"
+              className="accessInput"
             />
           </div>
 
-          <button
-            type="submit"
-            className="buttonFont primaryColor becomePrivateButton"
-          >
+          <button type="submit" className="buttonfont buttonSave">
             Log In
           </button>
+          <p className="bodyfont secondaryFontColor">
+            Don’t have an account?{" "}
+            <a
+              href="#"
+              onClick={onSwitch}
+              className="noUnderline secondaryFontColor"
+            >
+              Sign Up
+            </a>
+          </p>
         </form>
 
-        {errorMessage && <p className="mainFont">{errorMessage}</p>}
+        {errorMessage && <p className="bodyfont">{errorMessage}</p>}
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import ErrorPage from "./pages/ErrorPage";
@@ -30,7 +29,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="page">
       <Navbar
         isOverlayOpen={isOverlayOpen}
         handleLoginClick={handleLoginClick}

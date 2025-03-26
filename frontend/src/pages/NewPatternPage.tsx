@@ -2,7 +2,11 @@ import React from "react";
 import AddPattern from "../components/AddPattern";
 
 const NewPatternPage: React.FC = () => {
-  return <AddPattern />;
+  return (
+    <div className="componentBox">
+      <AddPattern />
+    </div>
+  );
 };
 
 export default NewPatternPage;

@@ -22,51 +22,19 @@
 
 .overlay-content 
   position: relative
-  background-color: $background-color !important
+  background-color: $second-background-color !important
   padding: 20px
   border-radius: 20px
   z-index: 1001
   max-width: 500px
   width: 82vw
-
-.login 
-  display: flex
-  flex-direction: column
-  gap: 24px
-  padding: 10px 40px 40px
   box-sizing: border-box
 
-.sign-up 
-  padding: 40px
-
-.signup-form 
+.deleteModalContent
   display: flex
   flex-direction: column
-  gap: 24px
+  gap: 16px
 
-.signUpInput 
-  padding: 12px 24px
-  border-radius: 40px
-  border: 1px solid black
-  background-color: var(--background-color)
-
-.input-group 
-  display: flex
-  flex-direction: column
-  gap: 8px
-
-.becomePrivateButton 
-  background-color: var(--main-color)
-
-.hiddenSignUp 
-  color: var(--background-color)
-  position: relative
-  left: 5px
-  cursor: default
-
-@media (max-width: 470px) 
-  .login 
-    padding: 10px 28px 28px
-
-  .sign-up 
-    padding: 28px
+@media (max-width: 470px)
+  .overlay-content
+    padding: 16px

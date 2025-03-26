@@ -1,8 +1,9 @@
 import React from "react";
-import { UserToPattern } from "../service/user.service";
+import { Pattern } from "../service/pattern.service";
+import PatternGrid from "./PatternGrid";
 
 interface currentUserLikedPatterns {
-  likedPatterns: UserToPattern[];
+  likedPatterns: Pattern[];
 }
 
 const UserLikedPattern: React.FC<currentUserLikedPatterns> = ({
@@ -11,14 +12,10 @@ const UserLikedPattern: React.FC<currentUserLikedPatterns> = ({
   return (
     <div>
       {likedPatterns.length > 0 ? (
-        <ul>
-          {likedPatterns.map((pattern) => (
-            <li key={pattern.id}>{pattern.name}</li>
-          ))}
-        </ul>
+        <PatternGrid patterns={likedPatterns} />
       ) : (
         <div>
-          <p>No patterns found</p>
+          <p className="bodyfont">No patterns found</p>
         </div>
       )}
     </div>

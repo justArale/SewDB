@@ -14,7 +14,7 @@ const AllUsersPage: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="componentBox">
       <h2>All Users</h2>
       <ul>
         {allUsers.map((user) => (

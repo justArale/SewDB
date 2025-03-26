@@ -9,6 +9,8 @@ import {
   getOnePattern,
   deletePattern,
 } from "../service/pattern.service";
+import HearUnfill from "../assets/icon/HeartUnfill.svg";
+// import HearFill from "../assets/image/heart-fill.svg";
 
 const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
@@ -16,6 +18,7 @@ const PatternDetailPage: React.FC = () => {
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const navigate = useNavigate();
 
@@ -30,7 +33,10 @@ const PatternDetailPage: React.FC = () => {
   const handleDeletePattern = async () => {
     try {
       if (currentPattern?.image) {
-        await deletePatternImage(currentPattern.image);
+        // Delete all images of the pattern
+        currentPattern.image.forEach(async (image) => {
+          await deletePatternImage(image);
+        });
       }
 
       // Delete the Pattern
@@ -50,44 +56,150 @@ const PatternDetailPage: React.FC = () => {
     setIsDeleteModalOpen(false);
   };
 
+  // Bildwechsel bei Dot-Klick
+  const handleDotClick = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
+  // Wischbewegung für mobiles Swipen
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX - touchEndX > 50) {
+      // Wischen nach links (nächstes Bild)
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex < (currentPattern?.image?.length || 1) - 1 ? prevIndex + 1 : 0
+      );
+    } else if (touchEndX - touchStartX > 50) {
+      // Wischen nach rechts (vorheriges Bild)
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : (currentPattern?.image?.length || 1) - 1
+      );
+    }
+  };
+
   return (
-    <div>
+    <div className="componentBox">
       {currentPattern && (
-        <div>
-          <h3>Current pattern: {currentPattern.name}</h3>
-          <ul>
-            <li>Intended for: {currentPattern.intendedFor}</li>
-            <li>Sizes: {currentPattern.sizes.join(", ")}</li>
-            <li>Category: {currentPattern.category.join(", ")}</li>
-            <li>Source: {currentPattern.source.join(", ")}</li>
+        <div className="patternDetailRow">
+          <div className="imageWrapper">
+            {currentPattern.image &&
+              currentPattern.image.map((image, index) => (
+                <div
+                  key={index}
+                  className={`imageCarousel ${
+                    index === currentImageIndex ? "active" : ""
+                  }`}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  {index === currentImageIndex && (
+                    <img
+                      src={image}
+                      alt={currentPattern.name}
+                      className="patternImage"
+                    />
+                  )}
+                </div>
+              ))}
+            <div className="dotsWrapper">
+              {currentPattern?.image?.map((_, index) => (
+                <span
+                  key={index}
+                  className={`dot ${
+                    index === currentImageIndex ? "active" : ""
+                  }`}
+                  onClick={() => handleDotClick(index)}
+                ></span>
+              ))}
+            </div>
+            <span className="likeIconWrapper">
+              <img src={HearUnfill} alt="heart" />
+            </span>
+          </div>
+
+          <ul className="patternContentWrapper">
+            <li>
+              <span></span>
+              <div>
+                <h5 className="labelfont">Name:</h5>
+                <p className="bodyfont patternContent">{currentPattern.name}</p>
+              </div>
+            </li>
+            <li>
+              <span></span>
+              <div>
+                <h5 className="labelfont">Intended for:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.intendedFor}
+                </p>
+              </div>
+            </li>
+            <li>
+              <span></span>
+
+              <div>
+                <h5 className="labelfont">Category:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.category.join(", ")}
+                </p>
+              </div>
+            </li>
+            <li>
+              <span></span>
+
+              <div>
+                <h5 className="labelfont">Sizes:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.sizes.join(", ")}
+                </p>
+              </div>
+            </li>
+            <li>
+              <span></span>
+
+              <div>
+                <h5 className="labelfont">Source:</h5>
+                <p className="bodyfont patternContent">
+                  {currentPattern.source.join(", ")}
+                </p>
+              </div>
+            </li>
           </ul>
-          {currentPattern.image && (
-            <img src={currentPattern.image} alt={currentPattern.name} />
-          )}
         </div>
       )}
       {user?.isAdmin && (
-        <div>
+        <div className="buttonWrapper">
           <Link to={`/patterns/${patternId}/edit`} state={{ currentPattern }}>
-            <button>Edit</button>
+            <button className="buttonAction">Edit</button>
           </Link>
-          <button onClick={handleDeleteModel}>Delete</button>
+          <button onClick={handleDeleteModel} className="buttonAware">
+            Delete
+          </button>
         </div>
       )}
       {isDeleteModalOpen && (
         <div className="overlay" onClick={closeModal}>
           <div className="overlay-content">
             <div className="deleteModalContent">
-              <h3 className="headline">Delete Pattern</h3>
-              <p className="mainFont">Are you sure to delete your pattern?</p>
+              <h3 className="bodyfontLarge">Delete Pattern</h3>
+              <p className="bodyfont">Are you sure to delete your pattern?</p>
               <button
                 className="button buttonAware primaryColor"
                 onClick={() => handleDeletePattern()}
               >
-                <div className="buttonContentWrapper">
-                  <div className="iconWrapper"></div>
-                  <span className="buttonFont">Delete</span>
-                </div>
+                <div className="innerButtonWrapper"></div>
+                <span className="labelfont">Delete</span>
               </button>
             </div>
           </div>

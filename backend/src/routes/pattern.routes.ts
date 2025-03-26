@@ -116,7 +116,6 @@ patternRouter.put("/patterns/:id", async (c) => {
       sizes,
       source,
       intendedFor,
-      updatedAt: new Date(),
     })
     .where(eq(patterns.id, id));
 

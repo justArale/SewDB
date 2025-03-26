@@ -1,5 +1,4 @@
 import React from "react";
-import "./LogInForm.css";
 
 interface SignUpFormProps {
   handleSignupSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -25,11 +24,11 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   onSwitch,
 }) => {
   return (
-    <div className="sign-up">
-      <form onSubmit={handleSignupSubmit} className="signup-form">
-        <h3 className="headline">Sign Up</h3>
+    <div className="access">
+      <form onSubmit={handleSignupSubmit} className="accessForm">
+        <h3 className="bodyfontLarge">Sign Up</h3>
         <div className="input-group">
-          <label htmlFor="name" className="mainFont">
+          <label htmlFor="name" className="bodyfont secondaryFontColor">
             Name
           </label>
           <input
@@ -39,13 +38,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
             value={name}
             onChange={handleName}
             autoComplete="off"
-            className="signUpInput"
+            className="accessInput"
             placeholder="What's your name?"
           />
         </div>
 
         <div className="input-group">
-          <label htmlFor="email" className="mainFont">
+          <label htmlFor="email" className="bodyfont secondaryFontColor">
             Email
           </label>
           <input
@@ -55,13 +54,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
             value={email}
             onChange={handleEmail}
             autoComplete="off"
-            className="signUpInput"
+            className="accessInput"
             placeholder="What's your email?"
           />
         </div>
 
         <div className="input-group">
-          <label htmlFor="password" className="mainFont">
+          <label htmlFor="password" className="bodyfont secondaryFontColor">
             Password
           </label>
           <input
@@ -72,19 +71,20 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
             onChange={handlePassword}
             autoComplete="off"
             placeholder="••••••••••••••••"
-            className="signUpInput"
+            className="accessInput"
           />
         </div>
 
-        <button
-          type="submit"
-          className="buttonFont primaryColor becomePrivateButton"
-        >
+        <button type="submit" className="buttonfont buttonSave">
           Create Account
         </button>
-        <p className="mainFont">
+        <p className="bodyfont secondaryFontColor">
           Already have an account?{" "}
-          <a href="#" onClick={onSwitch}>
+          <a
+            href="#"
+            onClick={onSwitch}
+            className="bodyfont secondaryFontColor"
+          >
             Log In
           </a>
         </p>

@@ -1,4 +1,3 @@
-import "./Navbar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useContext, Dispatch, SetStateAction } from "react";
 import { AuthContext } from "../context/auth.context";
@@ -50,80 +49,72 @@ const Navbar: React.FC<NavProps> = ({
             <img src={logo} alt="logo" className="logoImage" />
           </div>
           <Link to={`/`} className="noUnderline">
-            <h1 className="headline normalLineHeight boldWeight primaryColor">
+            <h1 className="pagetitle primaryFontColor normalLineheight">
               SewDB
             </h1>
-            <p className="mainFont semiBoldWeight thirdColor">
-              All my patterns
-            </p>
+            <p className="labelfont secondaryFontColor">All my patterns</p>
           </Link>
         </div>
         <div className="navigation">
-          {isLoggedIn && (
-            <div className="sidebar-path">
-              <Link
-                className="primaryColor noUnderline"
-                to={`/user/${user?.id}`}
-              >
-                <p
-                  className={`mainFont semiBoldWeight thirdColor profil ${
-                    location.pathname === `/user/${user?.id}` ||
-                    location.pathname === `/user/${user?.id}/edit`
-                      ? "active"
-                      : ""
-                  }`}
-                >
-                  Profil
-                </p>
-              </Link>
-            </div>
-          )}
-          <div className="action">
-            {user?.isAdmin && (
-              <div>
-                <button
-                  className="mainFont noUnderline primaryColor buttonReverse"
-                  onClick={handleButtonClick}
-                >
-                  <div className="buttonContentWrapper">
-                    <Add width="16" height="16" color="#FFF" />
-                    <span className="buttonFont buttonFontReverse">
-                      Pattern
-                    </span>
-                  </div>
-                </button>
-                <Link to={`/users`}>
+          {user?.isAdmin && (
+            <div className="navigation">
+              <div className="">
+                <Link to={`/users`} className="primaryFontColor noUnderline">
                   <p
-                    className={`mainFont semiBoldWeight thirdColor profil ${
-                      location.pathname === `/user/${user?.id}` ||
-                      location.pathname === `/user/${user?.id}/edit`
-                        ? "active"
-                        : ""
+                    className={`bodyfont secondaryFontColor profile ${
+                      location.pathname === `/users` ? "active" : ""
                     }`}
                   >
                     All users
                   </p>
                 </Link>
               </div>
-            )}
-            {isLoggedIn ? (
+
               <div>
                 <button
-                  onClick={handleLogout}
-                  className="mainFont noUnderline primaryColor"
+                  className="bodyfont buttonDefault"
+                  onClick={handleButtonClick}
                 >
-                  <span className="buttonFont">Log Out</span>
+                  <div className="innerButtonWrapper">
+                    <Add width="16" height="16" color="#000" />
+                    <span className="">Pattern</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+          {isLoggedIn && (
+            <div className="">
+              <Link
+                className="primaryFontColor noUnderline"
+                to={`/users/${user?.id}`}
+              >
+                <p
+                  className={`bodyfont secondaryFontColor profile ${
+                    location.pathname === `/users/${user?.id}` ||
+                    location.pathname === `/users/${user?.id}/edit`
+                      ? "active"
+                      : ""
+                  }`}
+                >
+                  My Profile
+                </p>
+              </Link>
+            </div>
+          )}
+          <div className="">
+            {isLoggedIn ? (
+              <div>
+                <button onClick={handleLogout} className="buttonDefault">
+                  <span className="labelfont">Log Out</span>
                 </button>
               </div>
             ) : (
               <>
                 {location.pathname !== "/login" &&
                   location.pathname !== "/signup" && (
-                    <button
-                      onClick={handleLoginClick}
-                      className="mainFont noUnderline primaryColor"
-                    >
-                      <span className="buttonFont">Log In</span>
+                    <button onClick={handleLoginClick} className="buttonAction">
+                      <span className="labelfont">Log In</span>
                     </button>
                   )}
               </>

@@ -8,19 +8,18 @@ interface UserInfoCardProps {
 const UserInfoCard: React.FC<UserInfoCardProps> = ({ user }) => {
   return (
     <div className="userInfoBox">
-      <div className="userInfoWrapper">
-        <div className="userInfo">
-          <h1 className="title">{user.name}</h1>
-          <div className="">
-            <p
-              className="mainFont semiBoldWeigth"
-              style={{ marginTop: "auto" }}
-            >
-              {/* {user.likes.length} liked pattern */}
-            </p>
-          </div>
-        </div>
-      </div>
+      <ul className="userInfoBoxContentWrapper">
+        <li className="userInfoBoxContent">
+          <span></span>
+          <h3 className="labelfont">Name:</h3>
+          <p className="bodyfont">{user.name}</p>
+        </li>
+        <li className="userInfoBoxContent">
+          <span></span>
+          <h3 className="labelfont">Email:</h3>
+          <p className="bodyfont">{user.email}</p>
+        </li>
+      </ul>
     </div>
   );
 };
