@@ -9,6 +9,8 @@ import {
   getOnePattern,
   deletePattern,
 } from "../service/pattern.service";
+import HearUnfill from "../assets/icon/HeartUnfill.svg";
+// import HearFill from "../assets/image/heart-fill.svg";
 
 const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
@@ -121,6 +123,9 @@ const PatternDetailPage: React.FC = () => {
                 ></span>
               ))}
             </div>
+            <span className="likeIconWrapper">
+              <img src={HearUnfill} alt="heart" />
+            </span>
           </div>
 
           <ul className="patternContentWrapper">
