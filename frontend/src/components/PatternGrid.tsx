@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Pattern } from "../service/pattern.service";
-
+import HearUnfill from "../assets/icon/HeartUnfill.svg";
+// import HearFill from "../assets/image/heart-fill.svg";
 interface PatternProps {
   patterns: Pattern[];
 }
@@ -24,6 +25,9 @@ const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
               <p className="bodyfont">Sizes: {pattern.sizes.join(", ")}</p>
             </div>
           </Link>
+          <span className="likeIconWrapper">
+            <img src={HearUnfill} alt="heart" />
+          </span>
         </div>
       ))}
     </div>
