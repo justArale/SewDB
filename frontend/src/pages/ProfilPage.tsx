@@ -67,41 +67,37 @@ const ProfilPage: React.FC = () => {
   };
 
   return (
-    <div className="componentBox">
+    <div className="profilPageWrapper">
       {currentUser && (
-        <div className="">
-          <div className="">
-            <div className="">
-              {isLoading ? (
-                <div className="skeleton skeletonUserInfoBox"></div>
-              ) : (
-                <UserInfoCard user={currentUser} />
-              )}
+        <div className="componentBox">
+          {isLoading ? (
+            <div className="skeleton skeletonUserInfoBox"></div>
+          ) : (
+            <UserInfoCard user={currentUser} />
+          )}
 
-              {user && userId === String(user.id) && (
-                <div className="buttonWrapper">
-                  <Link to={`/user/${userId}/edit`} className="">
-                    <button className="buttonAction">
-                      {" "}
-                      <div className="innerButtonWrapper">
-                        <Edit width="16" height="16" />
+          {user && userId === String(user.id) && (
+            <div className="buttonWrapper">
+              <Link to={`/user/${userId}/edit`} className="">
+                <button className="buttonAction">
+                  {" "}
+                  <div className="innerButtonWrapper">
+                    <Edit width="16" height="16" />
 
-                        <span className="">Edit</span>
-                      </div>
-                    </button>
-                  </Link>
+                    <span className="">Edit</span>
+                  </div>
+                </button>
+              </Link>
 
-                  <button className="buttonAware" onClick={handleDeleteModel}>
-                    <div className="innerButtonWrapper">
-                      <Delete width="16" height="16" />
+              <button className="buttonAware" onClick={handleDeleteModel}>
+                <div className="innerButtonWrapper">
+                  <Delete width="16" height="16" />
 
-                      <span className="">Delete</span>
-                    </div>
-                  </button>
+                  <span className="">Delete</span>
                 </div>
-              )}
+              </button>
             </div>
-          </div>
+          )}
           {currentUserLikedPatterns && (
             <UserLikedPatterns likedPatterns={currentUserLikedPatterns} />
           )}
