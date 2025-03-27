@@ -1,26 +1,21 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Pattern } from "../service/pattern.service";
 import HearUnfill from "../assets/icon/HeartUnfill.svg";
 import HearFill from "../assets/icon/heartFill.svg";
-import { likeUnlikePattern } from "../service/pattern.service";
 import { AuthContext } from "../context/auth.context";
-import { User } from "../service/user.service";
-
+import { useLikedPatterns } from "../context/likedPatterns.context";
 interface PatternProps {
   patterns: Pattern[];
 }
 
 const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
   const authContext = useContext(AuthContext);
-  const user: User | null = authContext?.user ?? null;
-  const [like, setLike] = useState<boolean>(false);
+  const { likedPatterns, toggleLike, isPatternLiked } = useLikedPatterns();
+  const user = authContext?.user;
 
-  const likeUnlike = async (patternId: string, userId: string) => {
-    console.log("likeUnlikePattern is clicked");
-    setLike((prevLike) => !prevLike);
-    console.log(like);
-    likeUnlikePattern(patternId, userId);
+  const handleLikeClick = (patternId: string, userId: string) => {
+    toggleLike(patternId, userId);
   };
 
   return (
@@ -43,14 +38,10 @@ const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
           <span
             className="likeIconWrapper"
             onClick={() => {
-              if (pattern?.id && user?.id) {
-                likeUnlike(pattern.id, user.id);
-              } else {
-                console.error("Pattern ID or User ID is undefined");
-              }
+              handleLikeClick(pattern.id, user.id);
             }}
           >
-            {like ? (
+            {isPatternLiked(pattern.id) ? (
               <img src={HearFill} alt="heart" />
             ) : (
               <img src={HearUnfill} alt="heart" />

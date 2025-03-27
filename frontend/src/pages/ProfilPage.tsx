@@ -10,21 +10,23 @@ import {
   deleteUser,
   logoutUser,
 } from "../service/user.service";
-import { Pattern, getUserLikedPattern } from "../service/pattern.service";
+// import { Pattern, getUserLikedPattern } from "../service/pattern.service";
 import { Edit } from "@just1arale/icons";
 import { Delete } from "@just1arale/icons";
 import UserInfoCard from "../components/UserInfoCard";
+import { useLikedPatterns } from "../context/likedPatterns.context";
 
 const ProfilPage: React.FC = () => {
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
   const { userId } = useParams();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentUserLikedPatterns, setCurrentUserLikedPatterns] = useState<
-    Pattern[] | []
-  >([]);
+  // const [currentUserLikedPatterns, setCurrentUserLikedPatterns] = useState<
+  //   Pattern[] | []
+  // >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { likedPatterns } = useLikedPatterns();
 
   const navigate = useNavigate();
 
@@ -36,8 +38,8 @@ const ProfilPage: React.FC = () => {
         const userData = await getSingleUser(userId);
         setCurrentUser(userData);
 
-        const userLikedPatterns = await getUserLikedPattern(userId);
-        setCurrentUserLikedPatterns(userLikedPatterns || []);
+        // const userLikedPatterns = await getUserLikedPattern(userId);
+        // setCurrentUserLikedPatterns(userLikedPatterns || []);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -98,9 +100,7 @@ const ProfilPage: React.FC = () => {
               </button>
             </div>
           )}
-          {currentUserLikedPatterns && (
-            <UserLikedPatterns likedPatterns={currentUserLikedPatterns} />
-          )}
+          {likedPatterns && <UserLikedPatterns likedPatterns={likedPatterns} />}
         </div>
       )}
 
