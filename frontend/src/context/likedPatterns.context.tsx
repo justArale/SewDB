@@ -37,7 +37,7 @@ export const LikedPatternWrapper = ({ children }: { children: ReactNode }) => {
   }, [user]);
 
   const isPatternLiked = (patternId: string) =>
-    likedPatterns.some((pattern) => pattern.id === patternId);
+    likedPatterns.some((pattern) => pattern.id == patternId);
 
   const toggleLike = async (patternId: string, userId: string) => {
     await likeUnlikePattern(patternId, userId);

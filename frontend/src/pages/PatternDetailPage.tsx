@@ -3,12 +3,12 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
+import { useLikedPatterns } from "../context/likedPatterns.context";
 import { deletePatternImage } from "../service/image.service";
 import {
   Pattern,
   getOnePattern,
   deletePattern,
-  likeUnlikePattern,
 } from "../service/pattern.service";
 import HearUnfill from "../assets/icon/HeartUnfill.svg";
 import HearFill from "../assets/icon/heartFill.svg";
@@ -17,18 +17,14 @@ const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
   const [currentPattern, setCurrentPattern] = useState<Pattern | null>(null);
   const { user } = useAuth();
-
+  const { toggleLike, isPatternLiked } = useLikedPatterns();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [like, setLike] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const likeUnlike = async (patternId: string, userId: string) => {
-    console.log("likeUnlikePattern is clicked");
-    setLike((prevLike) => !prevLike);
-    console.log(like);
-    likeUnlikePattern(patternId, userId);
+  const handleLikeClick = (patternId: string, userId: string) => {
+    toggleLike(patternId, userId);
   };
 
   useEffect(() => {
@@ -135,14 +131,12 @@ const PatternDetailPage: React.FC = () => {
             <span
               className="likeIconWrapper"
               onClick={() => {
-                if (currentPattern?.id && user?.id) {
-                  likeUnlike(currentPattern.id, user.id);
-                } else {
-                  console.error("Pattern ID or User ID is undefined");
+                if (user?.id && patternId) {
+                  handleLikeClick(patternId, user.id);
                 }
               }}
             >
-              {like ? (
+              {patternId && isPatternLiked(patternId) ? (
                 <img src={HearFill} alt="heart" />
               ) : (
                 <img src={HearUnfill} alt="heart" />
