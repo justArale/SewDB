@@ -21,10 +21,7 @@ likeRouter.get("/likes/:userId/patterns", async (c) => {
 
   const likedPatterns = await db
     .select({
-      id: patterns.id,
-      name: patterns.name,
-      image: patterns.image,
-      sizes: patterns.sizes,
+      patternId: patterns.id,
     })
     .from(usersToPatterns)
     .innerJoin(patterns, eq(usersToPatterns.patternId, patterns.id))
