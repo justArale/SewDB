@@ -10,7 +10,7 @@ import {
   getUserLikedPattern,
 } from "../service/pattern.service";
 import { Pattern } from "../service/pattern.service";
-import { AuthContext } from "./auth.context";
+import { useAuth } from "./auth.context";
 
 interface LikedPatternsContextType {
   likedPatterns: Pattern[];
@@ -24,8 +24,7 @@ const LikedPatternsContext = createContext<
 
 export const LikedPatternWrapper = ({ children }: { children: ReactNode }) => {
   const [likedPatterns, setLikedPatterns] = useState<Pattern[]>([]);
-  const authContext = useContext(AuthContext);
-  const user = authContext?.user;
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchLikedPatterns = async () => {
@@ -57,7 +56,7 @@ export const LikedPatternWrapper = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom Hook
+// Custom useLikedPatterns Hook
 export const useLikedPatterns = () => {
   const context = useContext(LikedPatternsContext);
   if (!context) {

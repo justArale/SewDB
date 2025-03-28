@@ -1,4 +1,10 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+} from "react";
 import {
   User,
   AuthContextType,
@@ -6,9 +12,9 @@ import {
   logoutUser,
 } from "../service/user.service";
 
-const AuthContext = React.createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
-const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
+export const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
@@ -57,4 +63,11 @@ const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export { AuthContextWrapper, AuthContext };
+// Custom useAuth Hook
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthContextProvider");
+  }
+  return context;
+};

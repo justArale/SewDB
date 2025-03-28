@@ -2,8 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import UserLikedPatterns from "../components/UserLikedPatterns";
-import { AuthContext } from "../context/auth.context";
-import { useContext } from "react";
+import { useAuth } from "../context/auth.context";
 import {
   User,
   getSingleUser,
@@ -16,13 +15,12 @@ import UserInfoCard from "../components/UserInfoCard";
 import { useLikedPatterns } from "../context/likedPatterns.context";
 
 const ProfilPage: React.FC = () => {
-  const authContext = useContext(AuthContext);
-  const user = authContext?.user;
   const { userId } = useParams();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { likedPatterns } = useLikedPatterns();
+  const { user } = useAuth();
 
   const navigate = useNavigate();
 

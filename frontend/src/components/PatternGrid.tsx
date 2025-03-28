@@ -1,18 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Pattern } from "../service/pattern.service";
 import HearUnfill from "../assets/icon/HeartUnfill.svg";
 import HearFill from "../assets/icon/heartFill.svg";
-import { AuthContext } from "../context/auth.context";
+import { useAuth } from "../context/auth.context";
 import { useLikedPatterns } from "../context/likedPatterns.context";
 interface PatternProps {
   patterns: Pattern[];
 }
 
 const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
-  const authContext = useContext(AuthContext);
   const { toggleLike, isPatternLiked } = useLikedPatterns();
-  const user = authContext?.user;
+  const { user } = useAuth();
 
   const handleLikeClick = (patternId: string, userId: string) => {
     toggleLike(patternId, userId);

@@ -1,8 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import React, { useContext, Dispatch, SetStateAction } from "react";
-import { AuthContext } from "../context/auth.context";
+import React, { Dispatch, SetStateAction } from "react";
+import { useAuth } from "../context/auth.context";
 import { Add } from "@just1arale/icons";
-import { User } from "../service/user.service";
 import logo from "../assets/image/logo.svg";
 import Overlay from "./OverlaySignupLogin";
 
@@ -22,10 +21,7 @@ const Navbar: React.FC<NavProps> = ({
   setIsLogin,
 }) => {
   const location = useLocation();
-  const authContext = useContext(AuthContext);
-  const isLoggedIn = authContext?.isLoggedIn ?? false;
-  const user: User | null = authContext?.user ?? null;
-  const logoutClick = authContext?.logoutClick;
+  const { isLoggedIn, user, logoutClick } = useAuth();
   const navigate = useNavigate();
 
   const handleButtonClick = () => {

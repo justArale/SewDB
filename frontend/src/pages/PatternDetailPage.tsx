@@ -1,8 +1,8 @@
 // PatternDetailPage.tsx
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
+import { useAuth } from "../context/auth.context";
 import { deletePatternImage } from "../service/image.service";
 import {
   Pattern,
@@ -16,8 +16,8 @@ import HearFill from "../assets/icon/heartFill.svg";
 const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
   const [currentPattern, setCurrentPattern] = useState<Pattern | null>(null);
-  const authContext = useContext(AuthContext);
-  const user = authContext?.user;
+  const { user } = useAuth();
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [like, setLike] = useState<boolean>(false);

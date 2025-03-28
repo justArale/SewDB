@@ -1,13 +1,12 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/auth.context";
+import { useState, useEffect } from "react";
+import { useAuth } from "../context/auth.context";
 import { Pattern, getAllPatterns } from "../service/pattern.service";
 import PatternGrid from "../components/PatternGrid";
 
 const AllPatternsPage: React.FC = () => {
   const [allPatterns, setAllPatterns] = useState<Pattern[]>([]);
-  const authContext = useContext(AuthContext);
-  const isLoggedIn = authContext ? authContext.isLoggedIn : false;
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     if (isLoggedIn) {
