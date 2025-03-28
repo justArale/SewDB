@@ -44,6 +44,25 @@ export const getOnePattern = async (patternId: string): Promise<Pattern> => {
   }
 };
 
+export const filterPatternsByParameter = async (
+  primaryParam: string,
+  primaryValue: string,
+  secondaryParam?: string,
+  secondaryValue?: string
+): Promise<Pattern[]> => {
+  console.log("Primary param:", primaryParam, "Primary value:", primaryValue);
+  try {
+    const url = `api/patterns/${primaryParam}/${primaryValue}/${
+      secondaryParam || ""
+    }/${secondaryValue || ""}`;
+    const response = await API.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching patterns: ", error);
+    return [];
+  }
+};
+
 export const createNewPattern = async (patternData: Pattern): Promise<void> => {
   try {
     await API.post(`api/patterns`, patternData);
@@ -99,6 +118,7 @@ export const getUserLikedPattern = async (
 export default {
   getAllPatterns,
   getOnePattern,
+  filterPatternsByParameter,
   createNewPattern,
   updatePattern,
   deletePattern,
