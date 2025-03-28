@@ -10,7 +10,6 @@ import {
   deleteUser,
   logoutUser,
 } from "../service/user.service";
-// import { Pattern, getUserLikedPattern } from "../service/pattern.service";
 import { Edit } from "@just1arale/icons";
 import { Delete } from "@just1arale/icons";
 import UserInfoCard from "../components/UserInfoCard";
@@ -21,9 +20,6 @@ const ProfilPage: React.FC = () => {
   const user = authContext?.user;
   const { userId } = useParams();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  // const [currentUserLikedPatterns, setCurrentUserLikedPatterns] = useState<
-  //   Pattern[] | []
-  // >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { likedPatterns } = useLikedPatterns();
@@ -37,9 +33,6 @@ const ProfilPage: React.FC = () => {
       try {
         const userData = await getSingleUser(userId);
         setCurrentUser(userData);
-
-        // const userLikedPatterns = await getUserLikedPattern(userId);
-        // setCurrentUserLikedPatterns(userLikedPatterns || []);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {

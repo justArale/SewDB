@@ -14,7 +14,7 @@ import { AuthContext } from "./auth.context";
 
 interface LikedPatternsContextType {
   likedPatterns: Pattern[];
-  toggleLike: (patternId: string) => void;
+  toggleLike: (patternId: string, userId: string) => void;
   isPatternLiked: (patternId: string) => boolean;
 }
 
@@ -27,28 +27,24 @@ export const LikedPatternWrapper = ({ children }: { children: ReactNode }) => {
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
 
-  //   useEffect(() => {
-  //     const fetchLikedPatterns = async () => {
-  //       if (user && user.id) {
-  //         const likedPatterns = await getUserLikedPattern(user.id);
-  //         setLikedPatterns(likedPatterns);
-  //       }
-  //     };
-  //     fetchLikedPatterns();
-  //   }, [likedPatterns]);
+  useEffect(() => {
+    const fetchLikedPatterns = async () => {
+      if (user && user.id) {
+        const likedPatterns = await getUserLikedPattern(user.id);
+        setLikedPatterns(likedPatterns);
+      }
+    };
+    fetchLikedPatterns();
+  }, [user]);
 
   const isPatternLiked = (patternId: string) =>
     likedPatterns.some((pattern) => pattern.id === patternId);
 
   const toggleLike = async (patternId: string, userId: string) => {
-    console.log("toggleLike is clicked");
-    likeUnlikePattern(patternId, userId);
-    if (isPatternLiked(patternId)) {
-      setLikedPatterns(
-        likedPatterns.filter((pattern) => pattern.id !== patternId)
-      );
-    } else {
-      setLikedPatterns([...likedPatterns, { id: patternId }]);
+    await likeUnlikePattern(patternId, userId);
+    if (user && user.id) {
+      const likedPatterns = await getUserLikedPattern(user.id);
+      setLikedPatterns(likedPatterns);
     }
   };
 

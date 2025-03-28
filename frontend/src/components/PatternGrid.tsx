@@ -11,7 +11,7 @@ interface PatternProps {
 
 const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
   const authContext = useContext(AuthContext);
-  const { likedPatterns, toggleLike, isPatternLiked } = useLikedPatterns();
+  const { toggleLike, isPatternLiked } = useLikedPatterns();
   const user = authContext?.user;
 
   const handleLikeClick = (patternId: string, userId: string) => {
@@ -38,10 +38,12 @@ const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
           <span
             className="likeIconWrapper"
             onClick={() => {
-              handleLikeClick(pattern.id, user.id);
+              if (user?.id && pattern.id) {
+                handleLikeClick(pattern.id, user.id);
+              }
             }}
           >
-            {isPatternLiked(pattern.id) ? (
+            {pattern.id && isPatternLiked(pattern.id) ? (
               <img src={HearFill} alt="heart" />
             ) : (
               <img src={HearUnfill} alt="heart" />
