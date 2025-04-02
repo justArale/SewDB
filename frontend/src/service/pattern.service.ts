@@ -52,9 +52,12 @@ export const filterPatternsByParameter = async (
 ): Promise<Pattern[]> => {
   console.log("Primary param:", primaryParam, "Primary value:", primaryValue);
   try {
-    const url = `api/patterns/${primaryParam}/${primaryValue}/${
-      secondaryParam || ""
-    }/${secondaryValue || ""}`;
+    let url = `api/patterns/${primaryParam}/${primaryValue}`;
+
+    if (secondaryParam && secondaryValue) {
+      url += `/${secondaryParam}/${secondaryValue}`;
+    }
+
     const response = await API.get(url);
     return response.data;
   } catch (error) {
