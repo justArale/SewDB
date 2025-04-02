@@ -1,6 +1,6 @@
 // src/pages/AllPatternsPage.tsx
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 import {
   Pattern,
@@ -11,15 +11,16 @@ import PatternGrid from "../components/PatternGrid";
 import PatternSearchbar from "../components/PatternSearchbar";
 
 const AllPatternsPage: React.FC = () => {
-  const params = new URLSearchParams(window.location.search);
-  const primaryParam = params.get("primaryParam");
-  const primaryValue = params.get("primaryValue");
-  const secondaryParam = params.get("secondaryParam");
-  const secondaryValue = params.get("secondaryValue");
+  const location = useLocation();
   const [allPatterns, setAllPatterns] = useState<Pattern[]>([]);
   const { isLoggedIn } = useAuth();
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const primaryParam = params.get("primaryParam");
+    const primaryValue = params.get("primaryValue");
+    const secondaryParam = params.get("secondaryParam");
+    const secondaryValue = params.get("secondaryValue");
     if (isLoggedIn) {
       if (primaryParam && primaryValue) {
         filterPatternsByParameter(
@@ -33,7 +34,10 @@ const AllPatternsPage: React.FC = () => {
         getAllPatterns().then(setAllPatterns);
       }
     }
-  }, [isLoggedIn, window.location.search]);
+    console.log("Current location.search:", location.search);
+    console.log("primaryParam", primaryParam);
+    console.log("primaryValue", primaryValue);
+  }, [isLoggedIn, location.search]);
 
   return (
     <div className="componentBox">
