@@ -157,7 +157,7 @@ const PatternDetailPage: React.FC = () => {
               <div>
                 <h5 className="labelfont">Intended for:</h5>
                 <p className="bodyfont patternContent">
-                  {currentPattern.intendedFor}
+                  {currentPattern.intendedFor.join(",")}
                 </p>
               </div>
             </li>

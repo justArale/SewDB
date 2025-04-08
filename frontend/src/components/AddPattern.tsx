@@ -23,7 +23,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   let navigate = useNavigate();
 
   const [name, setName] = useState<string>("");
-  const [intendedFor, setIntendedFor] = useState<string>("");
+  const [intendedFor, setIntendedFor] = useState<string[]>([""]);
   const [images, setImages] = useState<string[]>([""]);
   const [category, setCategory] = useState<string[]>([""]);
   const [sizes, setSizes] = useState<string[]>([""]);
@@ -32,7 +32,14 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   useEffect(() => {
     if (existingPattern) {
       setName(existingPattern.name);
-      setIntendedFor(existingPattern.intendedFor);
+      setIntendedFor(
+        Array.isArray(existingPattern.intendedFor) &&
+          existingPattern.intendedFor.length > 0
+          ? existingPattern.intendedFor.map((int) => {
+              return int;
+            })
+          : [""]
+      );
 
       setImages(
         Array.isArray(existingPattern.image) && existingPattern.image.length > 0
@@ -108,8 +115,13 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) =>
     setName(e.target.value);
 
-  const handleIntendedForInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIntendedFor(e.target.value);
+  const handleIntendedForInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const updatedIntendedFor = [...intendedFor];
+    updatedIntendedFor[index] = e.target.value || "";
+    setIntendedFor(updatedIntendedFor);
   };
 
   const handleCategoryInput = (
@@ -145,7 +157,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
       id: patternId,
       name: name,
       image: images.filter((img) => img.trim() !== ""),
-      intendedFor: intendedFor,
+      intendedFor: intendedFor.filter((int) => int.trim() !== ""),
       category: category.filter((cat) => cat.trim() !== ""), // Get rid of empty lines
       sizes: sizes.filter((size) => size.trim() !== ""),
       source: source.filter((sour) => sour.trim() !== ""),
@@ -176,11 +188,14 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
     }
   };
 
-  const addNewField = (field: "sizes" | "category" | "source") => {
+  const addNewField = (
+    field: "sizes" | "category" | "source" | "intendedFor"
+  ) => {
     const updateField = {
       sizes: () => setSizes([...sizes, ""]),
       category: () => setCategory([...category, ""]),
       source: () => setSource([...source, ""]),
+      intendedFor: () => setIntendedFor([...intendedFor, ""]),
     };
 
     updateField[field]?.();
@@ -199,15 +214,23 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
           value={name}
           onChange={handleNameInput}
         />
-        <input
-          required
-          type="text"
-          name="intendedFor"
-          className=""
-          placeholder="Intended for..."
-          value={intendedFor}
-          onChange={handleIntendedForInput}
-        />
+        {intendedFor.map((int, index) => (
+          <div key={index}>
+            <input
+              type="text"
+              name="intendedFor"
+              className="mainFont"
+              placeholder="Intended for..."
+              value={int}
+              onChange={(e) => handleIntendedForInput(e, index)}
+              onClick={
+                index === intendedFor.length - 1
+                  ? () => addNewField("intendedFor")
+                  : undefined
+              }
+            />
+          </div>
+        ))}
         <div className="">
           <input
             type="file"

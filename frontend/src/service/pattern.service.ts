@@ -13,7 +13,7 @@ export interface Pattern {
   sizes: string[];
   category: string[];
   source: string[];
-  intendedFor: string;
+  intendedFor: string[];
 }
 
 export const getAllPatterns = async (): Promise<Pattern[]> => {
@@ -39,7 +39,7 @@ export const getOnePattern = async (patternId: string): Promise<Pattern> => {
       sizes: [],
       category: [],
       source: [],
-      intendedFor: "",
+      intendedFor: [],
     };
   }
 };
