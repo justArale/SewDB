@@ -51,7 +51,7 @@ patternRouter.get(
       .from(patterns)
       .where(
         and(
-          eq(
+          arrayContains(
             patterns[primaryParam as keyof typeof patterns] as any,
             primaryValue
           ),

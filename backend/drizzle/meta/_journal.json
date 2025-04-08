@@ -29,6 +29,13 @@
       "when": 1742038797938,
       "tag": "0003_past_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1744112022395,
+      "tag": "0004_faithful_hiroim",
+      "breakpoints": true
     }
   ]
 }
