@@ -202,7 +202,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
         <h3 className="pageTitle">Pattern</h3>
         <input
@@ -326,7 +326,7 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

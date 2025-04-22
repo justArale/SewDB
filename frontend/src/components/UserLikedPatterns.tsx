@@ -10,7 +10,7 @@ const UserLikedPattern: React.FC<currentUserLikedPatterns> = ({
   likedPatterns,
 }) => {
   return (
-    <div>
+    <>
       {likedPatterns.length > 0 ? (
         <PatternGrid patterns={likedPatterns} />
       ) : (
@@ -18,7 +18,7 @@ const UserLikedPattern: React.FC<currentUserLikedPatterns> = ({
           <p className="bodyfont">No patterns found</p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
