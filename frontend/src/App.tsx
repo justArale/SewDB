@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "./context/auth.context";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import ErrorPage from "./pages/ErrorPage";
@@ -14,6 +15,7 @@ function App() {
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState(true);
   const location = useLocation();
+  const { isLoading } = useAuth();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,6 +29,15 @@ function App() {
   const handleCloseOverlay = () => {
     setIsOverlayOpen(false);
   };
+
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+        <p className="loading-text">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="page">
