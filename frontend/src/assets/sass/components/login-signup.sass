@@ -1,0 +1,27 @@
+@use "../base/variables" as *
+    
+.accessForm
+  display: flex
+  flex-direction: column
+  gap: 24px
+
+.access
+  @extend .accessForm
+  padding: 40px
+  box-sizing: border-box
+
+.accessInput 
+  padding: 12px 24px
+  border-radius: 40px
+  border: 1px solid black
+  background-color: $second-background-color
+
+.input-group 
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+
+@media (max-width: 470px) 
+  .access
+    padding: 28px

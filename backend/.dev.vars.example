@@ -1,0 +1,16 @@
+# Database Configuration
+DATABASE_URL=<your-neondb-connection-string>  # PostgreSQL connection string for NeonDB
+
+# Backend & Frontend Endpoints
+FPX_ENDPOINT=<your-backend-url>  # Base URL of your backend API
+ORIGIN=<your-frontend-url>       # Allowed origin for CORS (Frontend URL)
+
+# Security
+TOKEN_SECRET=<your-secret-token>  # Secret key for signing JWT tokens
+
+# Cloudinary Configuration
+CLOUDINARY_NAME=<your-cloudinary-name>      # Cloudinary account name
+CLOUDINARY_KEY=<your-cloudinary-key>        # Cloudinary API key
+CLOUDINARY_SECRET=<your-cloudinary-secret>  # Cloudinary API secret
+CLOUDINARY_URL=<your-cloudinary-url>        # Cloudinary API base URL
+CLOUDINARY_PRESET=<your-cloudinary-preset-name>  # Cloudinary upload preset name
