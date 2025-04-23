@@ -26,12 +26,12 @@ export const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
         if (user) {
           setIsLoggedIn(true);
           setUser(user);
+          console.log("isLoggedIn in .(then) authenticateUser", isLoggedIn);
         } else {
           setIsLoggedIn(false);
           setUser(null);
         }
         setIsLoading(false);
-        console.log("isLoading after authenticateUser", isLoading);
         console.log("isLoggedIn after authenticateUser", isLoggedIn);
       })
       .catch((error) => {
