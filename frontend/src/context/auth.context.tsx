@@ -40,7 +40,7 @@ export const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
         setUser(null);
         setIsLoading(false);
       });
-  }, [isLoading]);
+  }, []);
 
   const logoutClick = () => {
     logoutUser().then(() => {
