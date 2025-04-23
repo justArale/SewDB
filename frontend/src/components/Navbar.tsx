@@ -21,8 +21,10 @@ const Navbar: React.FC<NavProps> = ({
   setIsLogin,
 }) => {
   const location = useLocation();
-  const { isLoggedIn, user, logoutClick } = useAuth();
+  const { isLoggedIn, user, isLoading, logoutClick } = useAuth();
   const navigate = useNavigate();
+
+  if (isLoading) return null;
 
   const handleButtonClick = () => {
     if (isLoggedIn) {
