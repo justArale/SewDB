@@ -13,6 +13,7 @@ import ProfilPage from "./pages/ProfilPage";
 
 function App() {
   const { isLoading } = useAuth();
+  console.log("isLoading in App", isLoading);
 
   if (isLoading) {
     return (

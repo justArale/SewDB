@@ -31,6 +31,8 @@ export const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
           setUser(null);
         }
         setIsLoading(false);
+        console.log("isLoading after authenticateUser", isLoading);
+        console.log("isLoggedIn after authenticateUser", isLoggedIn);
       })
       .catch((error) => {
         setAuthError(error?.message || "An error occurred");
@@ -38,7 +40,7 @@ export const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
         setUser(null);
         setIsLoading(false);
       });
-  }, []);
+  }, [isLoading]);
 
   const logoutClick = () => {
     logoutUser().then(() => {
