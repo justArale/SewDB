@@ -11,7 +11,7 @@ import {
   deletePattern,
 } from "../service/pattern.service";
 import HearUnfill from "../assets/icon/HeartUnfill.svg";
-import HearFill from "../assets/icon/heartFill.svg";
+import HearFill from "../assets/icon/HeartFill.svg";
 
 const PatternDetailPage: React.FC = () => {
   const { patternId } = useParams();
