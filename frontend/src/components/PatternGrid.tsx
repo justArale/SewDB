@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Pattern } from "../service/pattern.service";
 import HearUnfill from "../assets/icon/HeartUnfill.svg";
-import HearFill from "../assets/icon/heartFill.svg";
+import HearFill from "../assets/icon/HeartFill.svg";
 import { useAuth } from "../context/auth.context";
 import { useLikedPatterns } from "../context/likedPatterns.context";
 interface PatternProps {
