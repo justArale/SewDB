@@ -89,6 +89,7 @@ authRouter.post("/signup", async (c) => {
 authRouter.post("/login", async (c) => {
   try {
     const { email, password } = loginSchema.parse(await c.req.json());
+    const isProduction = c.env.ENVIRONMENT === "production";
 
     if (!email || !password) {
       return c.json({ message: "Provide email and password." }, 400);
@@ -123,7 +124,7 @@ authRouter.post("/login", async (c) => {
       const authToken = await sign(payload, c.env.TOKEN_SECRET);
       setCookie(c, "authToken", authToken, {
         httpOnly: true,
-        //secure: true,
+        secure: isProduction,
         sameSite: "Lax",
         path: "/",
         maxAge: 600 * 600,

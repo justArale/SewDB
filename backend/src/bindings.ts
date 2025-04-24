@@ -8,4 +8,5 @@ export type Bindings = {
   CLOUDINARY_PRESET: string;
   params: { id: string; categrory: string; sizes: string };
   TOKEN_SECRET: string;
+  ENVIRONMENT: string;
 };

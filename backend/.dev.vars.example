@@ -7,6 +7,7 @@ ORIGIN=<your-frontend-url>       # Allowed origin for CORS (Frontend URL)
 
 # Security
 TOKEN_SECRET=<your-secret-token>  # Secret key for signing JWT tokens
+ENVIRONMENT=<development>/<production> # Environment variable for the secure variable in auth.routes.ts
 
 # Cloudinary Configuration
 CLOUDINARY_NAME=<your-cloudinary-name>      # Cloudinary account name
