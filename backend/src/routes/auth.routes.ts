@@ -9,6 +9,7 @@ import { z } from "zod";
 import { sign, verify } from "hono/jwt";
 import { getCookie, setCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
+import exp from "constants";
 
 const authRouter = new Hono<{ Bindings: Bindings }>();
 
@@ -24,6 +25,14 @@ const signupSchema = z.object({
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
+});
+
+const userSchema = z.object({
+  id: z.number(),
+  email: z.string().email(),
+  name: z.string(),
+  exp: z.number(),
+  isAdmin: z.boolean(),
 });
 
 // Signup Route
@@ -149,7 +158,9 @@ authRouter.get("/verify", async (c) => {
 
   try {
     const payload = await verify(authToken, c.env.TOKEN_SECRET);
-    return c.json(payload);
+    const validatedUser = userSchema.safeParse(payload);
+
+    return c.json(validatedUser.data);
   } catch (error) {
     return c.json({ message: "Token invalid or expired" }, 401);
   }
