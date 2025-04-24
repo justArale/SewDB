@@ -12,7 +12,7 @@ import {
 import { Pattern } from "../service/pattern.service";
 import { useAuth } from "./auth.context";
 
-interface LikedPatternsContextType {
+type LikedPatternsContextType = {
   likedPatterns: Pattern[];
   toggleLike: (patternId: string, userId: string) => void;
   isPatternLiked: (patternId: string) => boolean;

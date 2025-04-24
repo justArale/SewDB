@@ -5,7 +5,8 @@ import HearUnfill from "../assets/icon/HeartUnfill.svg";
 import HearFill from "../assets/icon/HeartFill.svg";
 import { useAuth } from "../context/auth.context";
 import { useLikedPatterns } from "../context/likedPatterns.context";
-interface PatternProps {
+
+type PatternProps = {
   patterns: Pattern[];
 }
 

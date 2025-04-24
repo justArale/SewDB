@@ -6,7 +6,7 @@ const API = axios.create({
   withCredentials: true,
 });
 
-export interface Pattern {
+export type Pattern = {
   id?: string;
   name: string;
   image?: string[];
@@ -14,7 +14,7 @@ export interface Pattern {
   category: string[];
   source: string[];
   intendedFor: string[];
-}
+};
 
 export const getAllPatterns = async (): Promise<Pattern[]> => {
   try {

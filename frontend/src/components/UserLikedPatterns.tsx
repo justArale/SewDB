@@ -2,9 +2,9 @@ import React from "react";
 import { Pattern } from "../service/pattern.service";
 import PatternGrid from "./PatternGrid";
 
-interface currentUserLikedPatterns {
+type currentUserLikedPatterns = {
   likedPatterns: Pattern[];
-}
+};
 
 const UserLikedPattern: React.FC<currentUserLikedPatterns> = ({
   likedPatterns,

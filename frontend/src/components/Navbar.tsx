@@ -5,7 +5,7 @@ import { Add } from "@just1arale/icons";
 import logo from "../assets/image/logo.svg";
 import Overlay from "./OverlaySignupLogin";
 
-interface NavProps {
+type NavProps = {
   isOverlayOpen: boolean;
   handleLoginClick: () => void;
   handleCloseOverlay: () => void;

@@ -1,7 +1,7 @@
 import React from "react";
 import { User } from "../service/user.service";
 
-interface UserInfoCardProps {
+type UserInfoCardProps = {
   user: User;
 }
 

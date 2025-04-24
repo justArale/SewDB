@@ -2,7 +2,7 @@
 // import React from "react";
 // import { Pattern } from "../service/pattern.service";
 // import { useNavigate } from "react-router-dom";
-// interface PatternProps {
+// type PatternProps = {
 //   patterns: Pattern[];
 // }
 

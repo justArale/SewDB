@@ -1,6 +1,6 @@
 import React from "react";
 
-interface SignUpFormProps {
+type SignUpFormProps = {
   handleSignupSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleEmail: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePassword: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -10,7 +10,7 @@ interface SignUpFormProps {
   name: string;
   errorMessage?: string;
   onSwitch: () => void;
-}
+};
 
 const SignUpForm: React.FC<SignUpFormProps> = ({
   handleSignupSubmit,

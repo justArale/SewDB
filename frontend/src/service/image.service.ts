@@ -7,7 +7,7 @@ const API = axios.create({
   withCredentials: true,
 });
 
-interface UploadResponse {
+type UploadResponse = {
   url: string;
 }
 

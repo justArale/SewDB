@@ -6,22 +6,22 @@ const API = axios.create({
   withCredentials: true,
 });
 
-export interface User {
+export type User = {
   id?: string;
   email: string;
   password: string;
   name: string;
   isAdmin: boolean;
-}
+};
 
-export interface AuthContextType {
+export type AuthContextType = {
   isLoggedIn: boolean;
   isLoading: boolean;
   user: User | null;
   authenticateUser: () => void;
   authError: string | null;
   logoutClick: () => void;
-}
+};
 
 export const authenticateUser = async (): Promise<User | null> => {
   try {

@@ -5,11 +5,11 @@ import React, { useState } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-interface OverlayProps {
+type OverlayProps = {
   isLogin: boolean;
   onClose: () => void;
   onSwitch: () => void;
-}
+};
 
 const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
   const [email, setEmail] = useState("");

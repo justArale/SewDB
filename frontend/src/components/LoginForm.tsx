@@ -1,6 +1,6 @@
 import React from "react";
 
-interface LoginFormProps {
+type LoginFormProps = {
   handleLoginSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleEmail: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePassword: (event: React.ChangeEvent<HTMLInputElement>) => void;
