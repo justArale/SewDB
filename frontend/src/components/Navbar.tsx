@@ -25,8 +25,6 @@ const Navbar: React.FC<NavProps> = ({
   const navigate = useNavigate();
 
   if (isLoading) return null;
-  console.log("isLoggedIn in navbar", isLoggedIn);
-  console.log("user in navbar", user);
 
   const handleButtonClick = () => {
     if (isLoggedIn) {

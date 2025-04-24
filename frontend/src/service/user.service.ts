@@ -26,7 +26,6 @@ export interface AuthContextType {
 export const authenticateUser = async (): Promise<User | null> => {
   try {
     const response = await API.get(`/auth/verify`);
-    console.log("Response from authenticateUser: ", response);
     return response.data;
   } catch (error) {
     console.error("Error", error);
