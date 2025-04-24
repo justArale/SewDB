@@ -26,6 +26,7 @@ export const AuthContextWrapper = ({ children }: { children: ReactNode }) => {
         if (user) {
           setIsLoggedIn(true);
           setUser(user);
+          console.log("User in .(then) authenticateUser", user);
           console.log("isLoggedIn in .(then) authenticateUser", isLoggedIn);
         } else {
           setIsLoggedIn(false);
