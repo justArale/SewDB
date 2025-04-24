@@ -26,6 +26,11 @@ export type AuthContextType = {
 export const authenticateUser = async (): Promise<User | null> => {
   try {
     const response = await API.get(`/auth/verify`);
+
+    if (!response.headers["content-type"]?.includes("application/json")) {
+      console.warn("Expected JSON, got something else.");
+      return null;
+    }
     return response.data;
   } catch (error) {
     console.error("Error", error);
