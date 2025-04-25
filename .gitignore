@@ -20,6 +20,7 @@ drizzle/
 .env
 .env.production
 .dev.vars
+.prod.vars
 
 # logs
 logs/
