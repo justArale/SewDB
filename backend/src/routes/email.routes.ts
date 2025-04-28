@@ -18,7 +18,7 @@ emailRouter.post("/email/sendVerification", async (c) => {
     await resend.emails.send({
       from: c.env.EMAIL_FROM,
       to,
-      subject: "Bitte teste diesen Link",
+      subject: "Confirm Your Email Address",
       html: htmlBody,
       tags: [
         {
