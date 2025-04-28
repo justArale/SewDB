@@ -13,8 +13,6 @@ emailRouter.post("/email/sendVerification", async (c) => {
     htmlBody: string;
   }>();
   const resend = getResendApiKey(c.env.RESEND_API_KEY);
-  console.log("Sending email to:", email);
-  console.log("HTML Body:", htmlBody);
 
   if (!email || !htmlBody) {
     return c.json({ message: "Missing parameters" }, 400);
