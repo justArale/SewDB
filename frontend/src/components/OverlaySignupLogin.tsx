@@ -2,6 +2,7 @@ import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import React, { useState } from "react";
+import { sendVerificationEmail } from "../service/email.service";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -18,6 +19,17 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
+
+  const sendEmail = async (name: string, email: string) => {
+    const url = "https://sewdb.arale.space";
+
+    try {
+      await sendVerificationEmail(name, email, url);
+      console.log("✅ Test-Mail erfolgreich gesendet!");
+    } catch (error) {
+      console.error("❌ Fehler beim Senden der Test-Mail:", error);
+    }
+  };
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
@@ -50,6 +62,9 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     axios
       .post(`${API_URL}/auth/signup`, requestBody)
       .then(() => {
+        sendEmail(name, email);
+      })
+      .then(() => {
         const loginRequestBody = { email, password };
 
         axios
@@ -66,6 +81,7 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
             setErrorMessage(errorDescription);
           });
       })
+
       .catch((error) => {
         const errorDescription =
           error.response?.data?.message || "An error occurred";

@@ -29,7 +29,16 @@ app.use("*", async (c, next) => {
 
 app.use("/api/*", async (c, next) => {
   const authToken = getCookie(c, "authToken");
+  const route = c.req.path;
 
+  const publicRoutes = ["/api/email/sendVerification"];
+  console.log("Route: ", route);
+  // Allow unauthenticated access to the email router
+  if (publicRoutes.includes(route)) {
+    console.log("Public route, skipping authentication");
+    await next();
+    return;
+  }
   if (!authToken) {
     return c.json({ message: "Unauthorized" }, 401);
   }

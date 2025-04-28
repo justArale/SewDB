@@ -8,16 +8,22 @@ const emailRouter = new Hono<{ Bindings: Bindings }>();
 const getResendApiKey = (RESEND_API_KEY: string) => new Resend(RESEND_API_KEY);
 
 emailRouter.post("/email/sendVerification", async (c) => {
-  const { to, htmlBody } = await c.req.json<{ to: string; htmlBody: string }>();
+  const { email, htmlBody } = await c.req.json<{
+    email: string;
+    htmlBody: string;
+  }>();
   const resend = getResendApiKey(c.env.RESEND_API_KEY);
-  if (!to || !htmlBody) {
+  console.log("Sending email to:", email);
+  console.log("HTML Body:", htmlBody);
+
+  if (!email || !htmlBody) {
     return c.json({ message: "Missing parameters" }, 400);
   }
 
   try {
     await resend.emails.send({
       from: c.env.EMAIL_FROM,
-      to,
+      to: email,
       subject: "Confirm Your Email Address",
       html: htmlBody,
       tags: [

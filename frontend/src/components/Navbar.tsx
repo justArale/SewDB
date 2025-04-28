@@ -4,7 +4,6 @@ import { useAuth } from "../context/auth.context";
 import { Add } from "@just1arale/icons";
 import logo from "../assets/image/logo.svg";
 import Overlay from "./OverlaySignupLogin";
-import { sendVerificationEmail } from "../service/email.service";
 
 type NavProps = {
   isOverlayOpen: boolean;
@@ -38,18 +37,6 @@ const Navbar: React.FC<NavProps> = ({
   const handleLogout = () => {
     logoutClick && logoutClick();
     navigate("/");
-  };
-
-  const sendEmail = async () => {
-    const to = "test@gmail.com";
-    const url = "https://sewdb.arale.space";
-
-    try {
-      await sendVerificationEmail(to, url);
-      console.log("✅ Test-Mail erfolgreich gesendet!");
-    } catch (error) {
-      console.error("❌ Fehler beim Senden der Test-Mail:", error);
-    }
   };
 
   return (
@@ -90,11 +77,6 @@ const Navbar: React.FC<NavProps> = ({
                     <Add width="16" height="16" color="#000" />
                     <span className="">Pattern</span>
                   </div>
-                </button>
-              </div>
-              <div>
-                <button className="bodyfont buttonDefault" onClick={sendEmail}>
-                  <span className="">Send Email</span>
                 </button>
               </div>
             </div>
