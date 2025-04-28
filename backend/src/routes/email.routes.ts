@@ -3,24 +3,29 @@ import { Hono } from "hono";
 import { Bindings } from "../bindings";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const emailRouter = new Hono<{ Bindings: Bindings }>();
+
+const getResendApiKey = (RESEND_API_KEY: string) => new Resend(RESEND_API_KEY);
 
 emailRouter.post("/email/sendVerification", async (c) => {
   const { to, htmlBody } = await c.req.json<{ to: string; htmlBody: string }>();
-
+  const resend = getResendApiKey(c.env.RESEND_API_KEY);
   if (!to || !htmlBody) {
     return c.json({ message: "Missing parameters" }, 400);
   }
-  console.log("backend-Sending email to:", to);
-  console.log("backend-Email URL:", htmlBody);
+
   try {
     await resend.emails.send({
       from: c.env.EMAIL_FROM,
       to,
       subject: "Bitte teste diesen Link",
       html: htmlBody,
+      tags: [
+        {
+          name: "category",
+          value: "confirm_email",
+        },
+      ],
     });
     return c.json({ message: "Email sent successfully" });
   } catch (error) {
