@@ -14,9 +14,6 @@ export const sendVerificationEmail = async (to: string, url: string) => {
     const htmlBody = ReactDOMServer.renderToStaticMarkup(
       React.createElement(VerificationBody, { url })
     );
-    ReactDOMServer.renderToStaticMarkup(
-      React.createElement(VerificationBody, { url })
-    );
 
     // Send the HTML body to the backend
     await API.post("/api/email/sendVerification", { to, htmlBody });
