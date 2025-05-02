@@ -9,7 +9,6 @@ import { z } from "zod";
 import { sign, verify } from "hono/jwt";
 import { getCookie, setCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
-import exp from "constants";
 
 const authRouter = new Hono<{ Bindings: Bindings }>();
 
@@ -75,6 +74,8 @@ authRouter.post("/signup", async (c) => {
 
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const token = crypto.randomUUID();
+  const expires = new Date(Date.now() + 1000 * 60 * 60); // 1h
 
   try {
     const createdUser = await db
@@ -84,6 +85,8 @@ authRouter.post("/signup", async (c) => {
         password: hashedPassword,
         name,
         isAdmin: isAdmin || false,
+        verificationToken: token,
+        verificationTokenExpires: expires,
       })
       .returning();
 
