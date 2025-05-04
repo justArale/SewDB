@@ -31,14 +31,6 @@ app.use("/api/*", async (c, next) => {
   const authToken = getCookie(c, "authToken");
   const route = c.req.path;
 
-  const publicRoutes = ["/api/email/sendVerification"];
-  console.log("Route: ", route);
-  // Allow unauthenticated access to the email router
-  if (publicRoutes.includes(route)) {
-    console.log("Public route, skipping authentication");
-    await next();
-    return;
-  }
   if (!authToken) {
     return c.json({ message: "Unauthorized" }, 401);
   }
@@ -61,7 +53,7 @@ app.route("/api", patternRouter);
 app.route("/api", userRouter);
 app.route("/api", imageRouter);
 app.route("/api", likeRouter);
-app.route("/api", emailRouter);
+app.route("/auth", emailRouter);
 
 /**
  * Serve a simplified api specification for your API
