@@ -25,13 +25,12 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     email: string,
     verifyToken: string
   ) => {
-    const url = `https://sewdb.arale.space/verifyToken?token=${verifyToken}`;
+    const url = `https://sewdb.arale.space/verify?token=${verifyToken}`;
 
     try {
-      await sendVerificationEmail(name, email, url);
-      console.log("✅ Test-Mail erfolgreich gesendet!");
+      await sendVerificationEmail(name, email, url, verifyToken);
     } catch (error) {
-      console.error("❌ Fehler beim Senden der Test-Mail:", error);
+      console.error("Issue sending email:", error);
     }
   };
 
@@ -66,7 +65,7 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     axios
       .post(`${API_URL}/auth/signup`, requestBody)
       .then((response) => {
-        const verifyToken = response.data.user.verifyToken;
+        const verifyToken = response.data.user.verificationToken;
         sendEmail(name, email, verifyToken);
       })
       // .then(() => {
