@@ -12,7 +12,8 @@ const API = axios.create({
 export const sendVerificationEmail = async (
   name: string,
   email: string,
-  url: string
+  url: string,
+  verifyToken: string
 ) => {
   try {
     const htmlBody = ReactDOMServer.renderToStaticMarkup(
@@ -20,7 +21,11 @@ export const sendVerificationEmail = async (
     );
 
     // Send the HTML body to the backend
-    await API.post("/api/email/sendVerification", { email, htmlBody });
+    await API.post(
+      "/auth/email/sendVerification",
+      { email, htmlBody },
+      { headers: { Authorization: `Bearer ${verifyToken}` } }
+    );
   } catch (error) {
     console.error("Error sending verification email:", error);
     throw error;
