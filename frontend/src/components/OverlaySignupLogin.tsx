@@ -20,8 +20,12 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     undefined
   );
 
-  const sendEmail = async (name: string, email: string) => {
-    const url = "https://sewdb.arale.space";
+  const sendEmail = async (
+    name: string,
+    email: string,
+    verifyToken: string
+  ) => {
+    const url = `https://sewdb.arale.space/verifyToken?token=${verifyToken}`;
 
     try {
       await sendVerificationEmail(name, email, url);
@@ -61,26 +65,27 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
 
     axios
       .post(`${API_URL}/auth/signup`, requestBody)
-      .then(() => {
-        sendEmail(name, email);
+      .then((response) => {
+        const verifyToken = response.data.user.verifyToken;
+        sendEmail(name, email, verifyToken);
       })
-      .then(() => {
-        const loginRequestBody = { email, password };
+      // .then(() => {
+      //   const loginRequestBody = { email, password };
 
-        axios
-          .post(`${API_URL}/auth/login`, loginRequestBody, {
-            withCredentials: true,
-          })
-          .then(() => {
-            onClose();
-            window.location.reload();
-          })
-          .catch((error) => {
-            const errorDescription =
-              error.response?.data?.message || "An error occurred";
-            setErrorMessage(errorDescription);
-          });
-      })
+      //   axios
+      //     .post(`${API_URL}/auth/login`, loginRequestBody, {
+      //       withCredentials: true,
+      //     })
+      //     .then(() => {
+      //       onClose();
+      //       window.location.reload();
+      //     })
+      //     .catch((error) => {
+      //       const errorDescription =
+      //         error.response?.data?.message || "An error occurred";
+      //       setErrorMessage(errorDescription);
+      //     });
+      // })
 
       .catch((error) => {
         const errorDescription =
