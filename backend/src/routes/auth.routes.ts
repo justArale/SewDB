@@ -118,6 +118,14 @@ authRouter.post("/login", async (c) => {
 
     if (foundUser.length === 0) {
       return c.json({ message: "User not found." }, 401);
+    } else if (foundUser[0].isVerified === false) {
+      return c.json(
+        {
+          message:
+            "User not verified. Please check your email for verification.",
+        },
+        401
+      );
     }
 
     const user = foundUser[0];
