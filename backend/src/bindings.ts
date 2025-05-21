@@ -9,4 +9,6 @@ export type Bindings = {
   params: { id: string; categrory: string; sizes: string };
   TOKEN_SECRET: string;
   ENVIRONMENT: string;
+  RESEND_API_KEY: string;
+  EMAIL_FROM: string;
 };

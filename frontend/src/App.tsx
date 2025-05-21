@@ -10,6 +10,7 @@ import EditPatternPage from "./pages/EditPatternPage";
 import PatternDetailPage from "./pages/PatternDetailPage";
 import AllUsersPage from "./pages/AllUsersPage";
 import ProfilPage from "./pages/ProfilPage";
+import UserVerifyPage from "./pages/UserVerifyPage";
 
 function App() {
   const { isLoading } = useAuth();
@@ -55,6 +56,7 @@ const Appcontent = () => {
       />
       <Routes>
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/verify" element={<UserVerifyPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/users" element={<AllUsersPage />} />
           <Route path="users/:userId" element={<ProfilPage />} />

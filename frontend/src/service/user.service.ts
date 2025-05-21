@@ -14,6 +14,10 @@ export type User = {
   isAdmin: boolean;
 };
 
+export type verifyMessage = {
+  message: string;
+};
+
 export type AuthContextType = {
   isLoggedIn: boolean;
   isLoading: boolean;
@@ -21,6 +25,24 @@ export type AuthContextType = {
   authenticateUser: () => void;
   authError: string | null;
   logoutClick: () => void;
+};
+
+export const verifyUser = async (
+  userVerifyToken: string
+): Promise<verifyMessage | null> => {
+  try {
+    const response = await API.get(
+      `/auth/verifyToken?token=${userVerifyToken}`
+    );
+    if (!response.headers["content-type"]?.includes("application/json")) {
+      console.warn("Expected JSON, got something else.");
+      return null;
+    }
+    return response.data.message;
+  } catch (error) {
+    console.error("Error", error);
+    return null;
+  }
 };
 
 export const authenticateUser = async (): Promise<User | null> => {
@@ -90,6 +112,7 @@ export const getPatternLikes = async (
 };
 
 export default {
+  verifyUser,
   authenticateUser,
   logoutUser,
   getAllUsers,

@@ -11,7 +11,7 @@ type NavProps = {
   handleCloseOverlay: () => void;
   isLogin: boolean;
   setIsLogin: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 const Navbar: React.FC<NavProps> = ({
   isOverlayOpen,

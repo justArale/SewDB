@@ -9,7 +9,6 @@ import { z } from "zod";
 import { sign, verify } from "hono/jwt";
 import { getCookie, setCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
-import exp from "constants";
 
 const authRouter = new Hono<{ Bindings: Bindings }>();
 
@@ -75,6 +74,8 @@ authRouter.post("/signup", async (c) => {
 
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const verifyToken = crypto.randomUUID();
+  const expires = new Date(Date.now() + 1000 * 60 * 60); // 1h
 
   try {
     const createdUser = await db
@@ -84,6 +85,8 @@ authRouter.post("/signup", async (c) => {
         password: hashedPassword,
         name,
         isAdmin: isAdmin || false,
+        verificationToken: verifyToken,
+        verificationTokenExpires: expires,
       })
       .returning();
 
@@ -161,6 +164,54 @@ authRouter.get("/verify", async (c) => {
     const validatedUser = userSchema.safeParse(payload);
 
     return c.json(validatedUser.data);
+  } catch (error) {
+    return c.json({ message: "Token invalid or expired" }, 401);
+  }
+});
+
+// Verify Token Route
+authRouter.get("/verifyToken", async (c) => {
+  const verifyToken = c.req.query("token");
+  const sql = neon(c.env.DATABASE_URL);
+  const db = drizzle(sql);
+
+  if (!verifyToken) {
+    return c.json({ message: "Token is invalid" }, 401);
+  }
+  try {
+    const foundUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.verificationToken, verifyToken))
+      .execute();
+
+    if (foundUser.length === 0) {
+      return c.json({ message: "User not found." }, 401);
+    }
+
+    const user = foundUser[0];
+    const isExpired = user.verificationTokenExpires
+      ? new Date(user.verificationTokenExpires) < new Date()
+      : true;
+
+    if (isExpired) {
+      return c.json({ message: "Token is expired" }, 401);
+    }
+
+    const updatedUser = await db
+      .update(users)
+      .set({
+        isVerified: true,
+        verificationToken: null,
+        verificationTokenExpires: null,
+      })
+      .where(eq(users.id, user.id))
+      .execute();
+
+    return c.json(
+      { message: "Your email has been successfully verified!" },
+      200
+    );
   } catch (error) {
     return c.json({ message: "Token invalid or expired" }, 401);
   }

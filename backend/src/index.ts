@@ -6,6 +6,7 @@ import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
 import imageRouter from "./routes/image.routes";
 import likeRouter from "./routes/like.routes";
+import emailRouter from "./routes/email.routes";
 import { getCookie } from "hono/cookie";
 import { verify } from "hono/jwt";
 
@@ -28,13 +29,20 @@ app.use("*", async (c, next) => {
 
 app.use("/api/*", async (c, next) => {
   const authToken = getCookie(c, "authToken");
+  const verifyToken = c.req.header("Authorization")?.replace("Bearer ", "");
 
-  if (!authToken) {
-    return c.json({ message: "Unauthorized" }, 401);
-  }
+  console.log("verifyToken", verifyToken);
 
   try {
-    const payload = await verify(authToken, c.env.TOKEN_SECRET);
+    if (authToken) {
+      await verify(authToken, c.env.TOKEN_SECRET);
+    } else if (verifyToken) {
+      if (!/^[\w\d-]{36}$/.test(verifyToken)) {
+        return c.json({ message: "Invalid token format" }, 400);
+      }
+    } else {
+      return c.json({ message: "Unauthorized – no token provided" }, 401);
+    }
 
     await next();
   } catch (error) {
@@ -51,6 +59,7 @@ app.route("/api", patternRouter);
 app.route("/api", userRouter);
 app.route("/api", imageRouter);
 app.route("/api", likeRouter);
+app.route("/auth", emailRouter);
 
 /**
  * Serve a simplified api specification for your API

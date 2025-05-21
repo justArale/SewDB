@@ -2,6 +2,7 @@ import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import React, { useState } from "react";
+import { sendVerificationEmail } from "../service/email.service";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -18,6 +19,20 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
+
+  const sendEmail = async (
+    name: string,
+    email: string,
+    verifyToken: string
+  ) => {
+    const url = `https://sewdb.arale.space/verify?token=${verifyToken}`;
+
+    try {
+      await sendVerificationEmail(name, email, url, verifyToken);
+    } catch (error) {
+      console.error("Issue sending email:", error);
+    }
+  };
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
@@ -49,23 +64,28 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
 
     axios
       .post(`${API_URL}/auth/signup`, requestBody)
-      .then(() => {
-        const loginRequestBody = { email, password };
-
-        axios
-          .post(`${API_URL}/auth/login`, loginRequestBody, {
-            withCredentials: true,
-          })
-          .then(() => {
-            onClose();
-            window.location.reload();
-          })
-          .catch((error) => {
-            const errorDescription =
-              error.response?.data?.message || "An error occurred";
-            setErrorMessage(errorDescription);
-          });
+      .then((response) => {
+        const verifyToken = response.data.user.verificationToken;
+        sendEmail(name, email, verifyToken);
       })
+      // .then(() => {
+      //   const loginRequestBody = { email, password };
+
+      //   axios
+      //     .post(`${API_URL}/auth/login`, loginRequestBody, {
+      //       withCredentials: true,
+      //     })
+      //     .then(() => {
+      //       onClose();
+      //       window.location.reload();
+      //     })
+      //     .catch((error) => {
+      //       const errorDescription =
+      //         error.response?.data?.message || "An error occurred";
+      //       setErrorMessage(errorDescription);
+      //     });
+      // })
+
       .catch((error) => {
         const errorDescription =
           error.response?.data?.message || "An error occurred";
