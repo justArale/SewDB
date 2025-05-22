@@ -68,24 +68,6 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
         const verifyToken = response.data.user.verificationToken;
         sendEmail(name, email, verifyToken);
       })
-      // .then(() => {
-      //   const loginRequestBody = { email, password };
-
-      //   axios
-      //     .post(`${API_URL}/auth/login`, loginRequestBody, {
-      //       withCredentials: true,
-      //     })
-      //     .then(() => {
-      //       onClose();
-      //       window.location.reload();
-      //     })
-      //     .catch((error) => {
-      //       const errorDescription =
-      //         error.response?.data?.message || "An error occurred";
-      //       setErrorMessage(errorDescription);
-      //     });
-      // })
-
       .catch((error) => {
         const errorDescription =
           error.response?.data?.message || "An error occurred";
