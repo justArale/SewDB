@@ -16,6 +16,9 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [formStatus, setFormStatus] = useState<
+    "loading" | "success" | "error" | ""
+  >("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
@@ -28,8 +31,26 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     const url = `https://sewdb.arale.space/verify?token=${verifyToken}`;
 
     try {
-      await sendVerificationEmail(name, email, url, verifyToken);
+      const response = await sendVerificationEmail(
+        name,
+        email,
+        url,
+        verifyToken
+      );
+      console.log("response", response);
+      console.log("response.message", response.message);
+      if (response && response.message === "Email sent successfully") {
+        setFormStatus("success");
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+        return response;
+      } else {
+        setFormStatus("error");
+        return response;
+      }
     } catch (error) {
+      setFormStatus("error");
       console.error("Issue sending email:", error);
     }
   };
@@ -44,7 +65,7 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
   const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const requestBody = { email, password };
-    console.log("API_URL", API_URL);
+
     axios
       .post(`${API_URL}/auth/login`, requestBody, { withCredentials: true })
       .then(() => {
@@ -60,6 +81,7 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
 
   const handleSignupSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFormStatus("loading");
     const requestBody = { email, password, name };
 
     axios
@@ -68,28 +90,11 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
         const verifyToken = response.data.user.verificationToken;
         sendEmail(name, email, verifyToken);
       })
-      // .then(() => {
-      //   const loginRequestBody = { email, password };
-
-      //   axios
-      //     .post(`${API_URL}/auth/login`, loginRequestBody, {
-      //       withCredentials: true,
-      //     })
-      //     .then(() => {
-      //       onClose();
-      //       window.location.reload();
-      //     })
-      //     .catch((error) => {
-      //       const errorDescription =
-      //         error.response?.data?.message || "An error occurred";
-      //       setErrorMessage(errorDescription);
-      //     });
-      // })
-
       .catch((error) => {
         const errorDescription =
           error.response?.data?.message || "An error occurred";
         setErrorMessage(errorDescription);
+        setFormStatus("error");
       });
   };
 
@@ -118,6 +123,7 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
             name={name}
             errorMessage={errorMessage}
             onSwitch={onSwitch}
+            formStatus={formStatus}
           />
         )}
       </div>

@@ -10,6 +10,7 @@ type SignUpFormProps = {
   name: string;
   errorMessage?: string;
   onSwitch: () => void;
+  formStatus: string;
 };
 
 const SignUpForm: React.FC<SignUpFormProps> = ({
@@ -22,6 +23,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   name,
   errorMessage,
   onSwitch,
+  formStatus,
 }) => {
   return (
     <div className="access">
@@ -75,8 +77,18 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           />
         </div>
 
-        <button type="submit" className="buttonfont buttonSave">
-          Create Account
+        <button
+          type="submit"
+          className="buttonfont buttonSave"
+          disabled={formStatus === "loading" || formStatus === "success"}
+        >
+          {formStatus === "loading"
+            ? "Sending verification email..."
+            : formStatus === "success"
+              ? "Email sent!"
+              : formStatus === "error"
+                ? "Try again"
+                : "Create Account"}
         </button>
         <p className="bodyfont secondaryFontColor">
           Already have an account?{" "}
