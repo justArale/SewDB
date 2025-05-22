@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import UserLikedPatterns from "../components/UserLikedPatterns";
 import { useAuth } from "../context/auth.context";
 import {
@@ -21,8 +21,6 @@ const ProfilPage: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { likedPatterns } = useLikedPatterns();
   const { user } = useAuth();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!userId) return;
@@ -45,7 +43,7 @@ const ProfilPage: React.FC = () => {
     try {
       await deleteUser(userId);
       await logoutUser();
-      navigate(`/`);
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting user:", error);
     }
