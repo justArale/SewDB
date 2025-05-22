@@ -21,11 +21,12 @@ export const sendVerificationEmail = async (
     );
 
     // Send the HTML body to the backend
-    await API.post(
+    const response = await API.post(
       "/auth/email/sendVerification",
       { email, htmlBody },
       { headers: { Authorization: `Bearer ${verifyToken}` } }
     );
+    return response.data;
   } catch (error) {
     console.error("Error sending verification email:", error);
     throw error;
