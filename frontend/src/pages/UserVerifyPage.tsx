@@ -14,7 +14,10 @@ const UserVerifyPage: React.FC = () => {
       verifyUser(token)
         .then((response) => {
           console.log("response", response);
-          if (response && response.message === "successfully") {
+          if (
+            response &&
+            response.message === "Your email has been successfully verified!"
+          ) {
             setStatus("success");
             setTimeout(() => {
               window.location.href = "/";
