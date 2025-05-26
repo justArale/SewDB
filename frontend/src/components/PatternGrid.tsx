@@ -7,7 +7,7 @@ import { useAuth } from "../context/auth.context";
 import { useLikedPatterns } from "../context/likedPatterns.context";
 import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 
-const ITEMS_PER_BATCH = import.meta.env.VITE_ITEMS_PER_BATCH;
+const ITEMS_PER_BATCH = Number(import.meta.env.VITE_ITEMS_PER_BATCH) || 20;
 
 type PatternProps = {
   patterns: Pattern[];
@@ -36,6 +36,9 @@ const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
   const bottomRef = useInfiniteScroll(loadMore);
 
   const visiblePatterns = patterns.slice(0, visibleCount);
+
+  console.log({ isLoading, visibleCount, total: patterns.length });
+  console.log("ITEMS_PER_BATCH", ITEMS_PER_BATCH);
 
   return (
     <div className="patternGrid">
