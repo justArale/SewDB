@@ -25,6 +25,7 @@ SewDB serves as both a practical tool for organizing creative work and a demonst
 - **🍪 Secure Session Handling** – JWT-based authentication via server-side middleware.
 - **📩 Email Verification** – Users must confirm their email after signup.
 - **☁️ Cloudinary Integration** – Image uploads and transformations handled via Cloudinary.
+- **📜 Infinite Scroll** – Patterns load automatically as the user scrolls down, improving performance and user experience.
 
 ## 🛠️ Dependencies
 
