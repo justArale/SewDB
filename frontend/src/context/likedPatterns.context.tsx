@@ -16,7 +16,7 @@ type LikedPatternsContextType = {
   likedPatterns: Pattern[];
   toggleLike: (patternId: string, userId: string) => void;
   isPatternLiked: (patternId: string) => boolean;
-}
+};
 
 const LikedPatternsContext = createContext<
   LikedPatternsContextType | undefined
