@@ -38,7 +38,7 @@ export const verifyUser = async (
       console.warn("Expected JSON, got something else.");
       return null;
     }
-    return response.data.message;
+    return response.data;
   } catch (error) {
     console.error("Error", error);
     return null;
