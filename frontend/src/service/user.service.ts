@@ -27,9 +27,14 @@ export type AuthContextType = {
   logoutClick: () => void;
 };
 
-export const signupUser = async (
-  requestBody: User
-): Promise<verifyMessage | null> => {
+export const signupUser = async (requestBody: {
+  email: string;
+  password: string;
+  name: string;
+}): Promise<{
+  message: string;
+  user: { verificationToken: string };
+} | null> => {
   try {
     const response = await API.post(`/auth/signup`, requestBody);
     return response.data;
@@ -39,7 +44,10 @@ export const signupUser = async (
   }
 };
 
-export const loginUser = async (requestBody: any) => {
+export const loginUser = async (requestBody: {
+  email: string;
+  password: string;
+}) => {
   try {
     await API.post(`/auth/login`, requestBody);
   } catch (error) {

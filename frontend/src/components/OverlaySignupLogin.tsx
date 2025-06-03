@@ -67,8 +67,7 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     e.preventDefault();
     const requestBody = { email, password };
 
-    try{
-      loginUser(requestBody)
+    loginUser(requestBody)
       .then(() => {
         onClose();
         window.location.reload();
@@ -78,8 +77,6 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
           error.response?.data?.message || "An error occurred";
         setErrorMessage(errorDescription);
       });
-    }
-      
   };
 
   const handleSignupSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -87,11 +84,12 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     setFormStatus("loading");
     const requestBody = { email, password, name };
 
-    try{
-      signupUser(requestBody)
+    signupUser(requestBody)
       .then((response) => {
-        const verifyToken = response.data.user.verificationToken;
-        sendEmail(name, email, verifyToken);
+        if (response && response.user.verificationToken) {
+          const verifyToken = response.user.verificationToken;
+          sendEmail(name, email, verifyToken);
+        }
       })
       .catch((error) => {
         const errorDescription =
@@ -99,9 +97,6 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
         setErrorMessage(errorDescription);
         setFormStatus("error");
       });
-    }
-     
-      
   };
 
   return (
