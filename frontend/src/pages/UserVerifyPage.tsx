@@ -13,8 +13,6 @@ const UserVerifyPage: React.FC = () => {
     if (token) {
       verifyUser(token)
         .then((response) => {
-          console.log("response", response);
-          console.log("response.message", response?.message);
           if (
             response &&
             response.message === "Your email has been successfully verified!"

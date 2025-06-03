@@ -9,7 +9,6 @@ const AllUsersPage: React.FC = () => {
   useEffect(() => {
     getAllUsers().then((users) => {
       users && setAllUsers(users);
-      console.log("users: ", users);
     });
   }, []);
 

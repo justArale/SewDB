@@ -5,8 +5,6 @@ import React, { useState } from "react";
 import { signupUser, loginUser } from "../service/user.service";
 import { sendVerificationEmail } from "../service/email.service";
 
-// const API_URL = import.meta.env.VITE_API_URL;
-
 type OverlayProps = {
   isLogin: boolean;
   onClose: () => void;
@@ -38,8 +36,6 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
         url,
         verifyToken
       );
-      console.log("response", response);
-      console.log("response.message", response.message);
       if (response && response.message === "Email sent successfully") {
         setFormStatus("success");
         setTimeout(() => {

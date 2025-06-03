@@ -37,9 +37,6 @@ const AllPattern: React.FC<PatternProps> = ({ patterns }) => {
 
   const visiblePatterns = patterns.slice(0, visibleCount);
 
-  console.log({ isLoading, visibleCount, total: patterns.length });
-  console.log("ITEMS_PER_BATCH", ITEMS_PER_BATCH);
-
   return (
     <div className="patternGrid">
       {Array.isArray(patterns) &&
