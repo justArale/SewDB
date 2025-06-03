@@ -1,10 +1,11 @@
-import axios from "axios";
+// import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import React, { useState } from "react";
+import { signupUser, loginUser } from "../service/user.service";
 import { sendVerificationEmail } from "../service/email.service";
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 
 type OverlayProps = {
   isLogin: boolean;
@@ -66,8 +67,8 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     e.preventDefault();
     const requestBody = { email, password };
 
-    axios
-      .post(`${API_URL}/auth/login`, requestBody, { withCredentials: true })
+    try{
+      loginUser(requestBody)
       .then(() => {
         onClose();
         window.location.reload();
@@ -77,6 +78,8 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
           error.response?.data?.message || "An error occurred";
         setErrorMessage(errorDescription);
       });
+    }
+      
   };
 
   const handleSignupSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,8 +87,8 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     setFormStatus("loading");
     const requestBody = { email, password, name };
 
-    axios
-      .post(`${API_URL}/auth/signup`, requestBody)
+    try{
+      signupUser(requestBody)
       .then((response) => {
         const verifyToken = response.data.user.verificationToken;
         sendEmail(name, email, verifyToken);
@@ -96,6 +99,9 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
         setErrorMessage(errorDescription);
         setFormStatus("error");
       });
+    }
+     
+      
   };
 
   return (

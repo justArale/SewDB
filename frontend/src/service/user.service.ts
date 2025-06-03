@@ -27,6 +27,26 @@ export type AuthContextType = {
   logoutClick: () => void;
 };
 
+export const signupUser = async (
+  requestBody: User
+): Promise<verifyMessage | null> => {
+  try {
+    const response = await API.post(`/auth/signup`, requestBody);
+    return response.data;
+  } catch (error) {
+    console.error("Logout failed:", error);
+    return null;
+  }
+};
+
+export const loginUser = async (requestBody: any) => {
+  try {
+    await API.post(`/auth/login`, requestBody);
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+};
+
 export const verifyUser = async (
   userVerifyToken: string
 ): Promise<verifyMessage | null> => {
@@ -112,6 +132,8 @@ export const getPatternLikes = async (
 };
 
 export default {
+  signupUser,
+  loginUser,
   verifyUser,
   authenticateUser,
   logoutUser,
