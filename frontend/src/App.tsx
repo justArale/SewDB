@@ -14,8 +14,6 @@ import UserVerifyPage from "./pages/UserVerifyPage";
 
 function App() {
   const { isLoading } = useAuth();
-  // console.log("isLoading in App", isLoading);
-
   if (isLoading) {
     return (
       <div className="loading">

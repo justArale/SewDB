@@ -1,10 +1,9 @@
-import axios from "axios";
+// import axios from "axios";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
 import React, { useState } from "react";
+import { signupUser, loginUser } from "../service/user.service";
 import { sendVerificationEmail } from "../service/email.service";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 type OverlayProps = {
   isLogin: boolean;
@@ -37,8 +36,6 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
         url,
         verifyToken
       );
-      console.log("response", response);
-      console.log("response.message", response.message);
       if (response && response.message === "Email sent successfully") {
         setFormStatus("success");
         setTimeout(() => {
@@ -66,8 +63,7 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     e.preventDefault();
     const requestBody = { email, password };
 
-    axios
-      .post(`${API_URL}/auth/login`, requestBody, { withCredentials: true })
+    loginUser(requestBody)
       .then(() => {
         onClose();
         window.location.reload();
@@ -84,11 +80,12 @@ const Overlay: React.FC<OverlayProps> = ({ isLogin, onClose, onSwitch }) => {
     setFormStatus("loading");
     const requestBody = { email, password, name };
 
-    axios
-      .post(`${API_URL}/auth/signup`, requestBody)
+    signupUser(requestBody)
       .then((response) => {
-        const verifyToken = response.data.user.verificationToken;
-        sendEmail(name, email, verifyToken);
+        if (response && response.user.verificationToken) {
+          const verifyToken = response.user.verificationToken;
+          sendEmail(name, email, verifyToken);
+        }
       })
       .catch((error) => {
         const errorDescription =

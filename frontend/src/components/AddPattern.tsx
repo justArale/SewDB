@@ -90,7 +90,6 @@ const AddPattern: React.FC<{ existingPattern?: Pattern }> = ({
       const fileUrl = await uploadPatternImage(fileData);
 
       if (fileUrl) {
-        console.log("fileUrl.url inside if: ", fileUrl.url);
         if (fileUrl && typeof fileUrl === "object" && fileUrl.url) {
           setImages((prevImages) => [...prevImages, fileUrl.url]);
         } else {

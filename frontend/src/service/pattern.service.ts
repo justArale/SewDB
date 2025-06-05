@@ -50,7 +50,6 @@ export const filterPatternsByParameter = async (
   secondaryParam?: string,
   secondaryValue?: string
 ): Promise<Pattern[]> => {
-  console.log("Primary param:", primaryParam, "Primary value:", primaryValue);
   try {
     let url = `api/patterns/${primaryParam}/${primaryValue}`;
 
